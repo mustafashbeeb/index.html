@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="dark">
 <head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#131b2e">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SHBEEB Studio | منصة صناعة وهندسة الأوامر والسيناريو</title>
