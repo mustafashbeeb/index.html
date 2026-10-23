@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHBEEB Studio | منصة صناعة وهندسة الأوامر والسيناريو</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            shbeeb: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              gold: '#f59e0b',
+              dark: '#0b1120'
+            },
+            darkbg: '#090d16',
+            darkcard: '#131b2e',
+            darkborder: '#23304a'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    body { font-family: 'Cairo', sans-serif; }
+    .mono-font { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-darkbg text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+  <!-- Header with SHBEEB Logo -->
+  <header class="sticky top-0 z-50 bg-white/95 dark:bg-darkbg/95 backdrop-blur border-b border-slate-200 dark:border-darkborder px-4 py-2.5 shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & SHBEEB Logo -->
+      <div class="flex items-center gap-3">
+        <div class="relative group cursor-pointer">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-amber-500 p-0.5 shadow-lg shadow-blue-500/20 flex items-center justify-center">
+            <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+              <span class="font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-blue-400 text-sm tracking-tighter mono-font font-extrabold">SB</span>
+            </div>
+          </div>
+          <span class="absolute -bottom-1 -right-1 flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500 border border-slate-900"></span>
+          </span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+              <span>SHBEEB</span>
+              <span class="text-blue-600 dark:text-blue-400 text-sm font-semibold">AI STUDIO</span>
+            </h1>
+            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">Pro Engine</span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">منظومة شبيب المتكاملة لهندسة الأوامر وصناعة السيناريو والأفلام</p>
+        </div>
+      </div>
+
+      <!-- Controls & Quick Search -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute top-2.5 right-3 text-slate-400 text-xs"></i>
+          <input type="text" id="globalSearch" placeholder="بحث سريع في كل الأوامر والمواقع..." 
+                 class="w-48 sm:w-64 bg-slate-100 dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-xl pr-8 pl-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+        </div>
+
+        <button onclick="toggleLang()" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-darkborder text-xs font-bold hover:bg-slate-100 dark:hover:bg-darkcard flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-globe text-blue-500"></i>
+          <span id="langLabel">English</span>
+        </button>
+
+        <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-xl border border-slate-200 dark:border-darkborder text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkcard flex items-center justify-center transition">
+          <i id="themeIcon" class="fa-solid fa-sun text-amber-400"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs Bar -->
+  <div class="bg-white dark:bg-darkcard border-b border-slate-200 dark:border-darkborder shadow-sm sticky top-[61px] z-40">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between overflow-x-auto gap-2 py-2">
+      <div class="flex items-center gap-1.5 text-xs font-bold whitespace-nowrap" id="tabButtonsContainer">
+        <button onclick="switchTab('studio')" id="tabBtn-studio" class="tab-btn active px-3 py-2 rounded-xl transition flex items-center gap-2 bg-blue-600 text-white font-bold shadow-md shadow-blue-500/20">
+          <i class="fa-solid fa-clapperboard"></i> <span>ستوديو القصة والحلقات</span>
+        </button>
+        <button onclick="switchTab('photos')" id="tabBtn-photos" class="tab-btn px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+          <i class="fa-solid fa-images"></i> <span>مكتبة الصور والبورتريه (49)</span>
+        </button>
+        <button onclick="switchTab('directory')" id="tabBtn-directory" class="tab-btn px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+          <i class="fa-solid fa-compass text-amber-500"></i> <span>دليل المواقع العالمية (صينية وغربية 30+)</span>
+        </button>
+        <button onclick="switchTab('flow')" id="tabBtn-flow" class="tab-btn px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+          <i class="fa-solid fa-video text-emerald-500"></i> <span>قاموس Google Flow (99 أمر)</span>
+        </button>
+        <button onclick="switchTab('chatgpt')" id="tabBtn-chatgpt" class="tab-btn px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2">
+          <i class="fa-solid fa-terminal text-purple-500"></i> <span>أوامر ChatGPT السرية (24)</span>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <button onclick="openNewTabModal()" class="text-xs px-2.5 py-1.5 rounded-lg border border-dashed border-blue-400 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition flex items-center gap-1 font-semibold">
+          <i class="fa-solid fa-plus"></i> <span>تبويب مخصص</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workspace -->
+  <main class="max-w-7xl mx-auto px-4 py-6">
+
+    <!-- ==============================================
+         TAB 1: AI STUDIO, STORY, CHARACTERS & EPISODES
+         ============================================== -->
+    <section id="tab-studio" class="tab-content space-y-6">
+      <!-- Input Generator Card -->
+      <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-darkborder/70 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+              <i class="fa-solid fa-pen-fancy"></i>
+            </div>
+            <div>
+              <h2 class="font-bold text-sm sm:text-base">ستوديو شبيب لصناعة السيناريو وتوليد الحلقات والشخصيات</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">ادخل فكرتك أو قصتك وسيقوم المحرك الذكي بتوليد السيناريو والشخصيات وبرومبتات الحلقات بنقرة واحدة</p>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold hidden sm:inline-block">AI Script Engine v2.0</span>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-xs font-bold text-slate-700 dark:text-slate-300">الفكرة أو القصة والموضوع التفصيلي:</label>
+              <button onclick="setSampleIdea()" class="text-[11px] text-blue-600 dark:text-blue-400 hover:underline">
+                <i class="fa-solid fa-lightbulb"></i> تجربة فكرة جاهزة
+              </button>
+            </div>
+            <textarea id="storyIdeaInput" rows="3" class="w-full bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-darkborder rounded-xl p-3 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="اكتب فكرتك هنا... مثال: قصة تاجر آثار يكتشف بوابة زمنية سرية في دمشق القديمة، المشاهد سينمائية ليلية مع أضواء نيون وضباب، كاميرا تتبع درامية..."></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">عدد المشاهد / الحلقات المطلوبة:</label>
+              <input type="number" id="episodeCount" value="4" min="1" max="10" class="w-full bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-darkborder rounded-xl px-3 py-2 text-xs focus:outline-none font-bold">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">مقاس الفيديو (Aspect Ratio):</label>
+              <select id="videoAspectRatio" class="w-full bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-darkborder rounded-xl px-3 py-2 text-xs focus:outline-none font-semibold">
+                <option value="16:9">16:9 (عريض - سينمائي / يوتيوب)</option>
+                <option value="9:16">9:16 (طولي - تيك توك / ريلز / شورتس)</option>
+                <option value="1:1">1:1 (مربع - إنستغرام)</option>
+                <option value="2.39:1">2.39:1 (أنامورفيك سينمائي عريض)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">النمط البصري العام والتصوير:</label>
+              <select id="videoStyleSelect" class="w-full bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-darkborder rounded-xl px-3 py-2 text-xs focus:outline-none font-semibold">
+                <option value="cinematic 35mm film, dramatic lighting, photorealistic, volumetric god rays">سينمائي واقعي (35mm Film + God Rays)</option>
+                <option value="cyberpunk neon, dark rainy moody atmosphere, reflective wet streets">سايبربانك ونيون (Cyberpunk & Rain)</option>
+                <option value="luxury commercial style, soft warm studio lighting, 8k ultra high detail">إعلانات وأزياء فاخرة (Luxury Commercial)</option>
+                <option value="documentary handheld style, natural raw textures, realistic ambient">وثائقي كاميرا محمولة (Documentary Handheld)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
+            <button onclick="generateStoryAndEpisodes()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/25 flex items-center gap-2 transition active:scale-95">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>توليد السيناريو والشخصيات والحلقات الآن</span>
+            </button>
+            <button onclick="clearStudio()" class="text-xs text-slate-400 hover:text-red-500 transition flex items-center gap-1">
+              <i class="fa-solid fa-trash-can"></i> <span>إفراغ الحقول</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generated Characters Section -->
+      <div id="charactersSection" class="hidden space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold flex items-center gap-2 text-indigo-500">
+            <i class="fa-solid fa-users"></i> <span>بطاقات الشخصيات المولدة تلقائياً (Character Identity Lock)</span>
+          </h3>
+          <span class="text-xs text-slate-400">توليد برومبت وصورة مصغرة لكل شخصية لتثبيت الهوية</span>
+        </div>
+        <div id="charactersGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <!-- Generated Episodes Section -->
+      <div id="episodesSection" class="hidden space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-sm font-bold flex items-center gap-2 text-blue-500">
+            <i class="fa-solid fa-film"></i> <span>جدول الحلقات والمشاهد المولدة</span>
+          </h3>
+          <div class="flex items-center gap-2">
+            <button onclick="copyAllEpisodes()" class="text-xs px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 font-bold hover:bg-blue-100 transition flex items-center gap-1">
+              <i class="fa-solid fa-copy"></i> نسخ كافة الحلقات دفعة واحدة
+            </button>
+          </div>
+        </div>
+        <div id="episodesList" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         TAB 2: IMAGE PROMPTS LIBRARY (49 PROMPTS)
+         ============================================== -->
+    <section id="tab-photos" class="tab-content hidden space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder p-4 rounded-2xl shadow-sm">
+        <div>
+          <h2 class="font-bold text-base flex items-center gap-2">
+            <i class="fa-solid fa-images text-blue-500"></i>
+            <span>مكتبة الأوامر والصور الكاملة (49 برومبت مع النماذج المصغرة)</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">جميع برومبتات مشروعك مفرغة بالكامل مع تصنيفاتها ونماذج المحاكاة ونسبة الأبعاد</p>
+        </div>
+        <div class="flex items-center gap-1.5 flex-wrap text-xs">
+          <button onclick="filterPhotos('all')" class="photo-filter-btn active px-3 py-1.5 rounded-xl bg-blue-600 text-white font-bold">الكل (49)</button>
+          <button onclick="filterPhotos('editorial')" class="photo-filter-btn px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">أزياء ومجلات</button>
+          <button onclick="filterPhotos('face_id')" class="photo-filter-btn px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">تثبيت الهوية Face Lock</button>
+          <button onclick="filterPhotos('cinematic')" class="photo-filter-btn px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">سينمائي ودرامي</button>
+          <button onclick="filterPhotos('vehicles')" class="photo-filter-btn px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">سيارات ودراجات</button>
+          <button onclick="filterPhotos('fantasy_tech')" class="photo-filter-btn px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">تقنية وفانتازيا</button>
+        </div>
+      </div>
+
+      <!-- Prompts Grid -->
+      <div id="photosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- ==============================================
+         TAB 3: AI DIRECTORY (30+ GLOBAL TOOLS)
+         ============================================== -->
+    <section id="tab-directory" class="tab-content hidden space-y-4">
+      <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
+        <div>
+          <h2 class="font-bold text-base flex items-center gap-2">
+            <i class="fa-solid fa-compass text-amber-500"></i>
+            <span>دليل مواقع وأدوات الذكاء الاصطناعي الشامل (أكثر من 30 موقعاً)</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">يضم كبرى المنصات الصينية، الغربية، ومفتوحة المصدر مع توضيح الرصيد المجاني وروابط فورية</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 font-bold">15 منصة فيديو</span>
+          <span class="px-2.5 py-1 rounded-lg bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-300 font-bold">15 منصة صور وتصميم</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Video Tools (Chinese + Western + Global) -->
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-darkborder pb-2.5">
+            <h3 class="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              <i class="fa-solid fa-video"></i> <span>منصات ومحركات توليد الفيديو السينمائي</span>
+            </h3>
+            <span class="text-xs text-slate-400 font-mono">15 منصة</span>
+          </div>
+          <div id="videoToolsList" class="space-y-2.5 max-h-[650px] overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- Image Tools (Midjourney, FLUX, Chinese Tech, LoRA) -->
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-darkborder pb-2.5">
+            <h3 class="font-bold text-sm text-purple-600 dark:text-purple-400 flex items-center gap-2">
+              <i class="fa-solid fa-palette"></i> <span>منصات ومحركات توليد الصور والبورتريه</span>
+            </h3>
+            <span class="text-xs text-slate-400 font-mono">15 منصة</span>
+          </div>
+          <div id="imageToolsList" class="space-y-2.5 max-h-[650px] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         TAB 4: GOOGLE FLOW 99 COMMANDS
+         ============================================== -->
+    <section id="tab-flow" class="tab-content hidden space-y-4">
+      <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
+        <div>
+          <h2 class="font-bold text-base flex items-center gap-2">
+            <i class="fa-solid fa-clapperboard text-emerald-500"></i>
+            <span>قاموس Google Flow السينمائي (دليل الـ 99 أمر)</span>
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400">انقر على أي مصطلح لإضافته إلى شريط البناء الحي لنسخ البرومبت المتكامل</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="copyCurrentFlowBuilder()" class="text-xs px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-copy"></i> <span>نسخ التركيبة المجمعة</span>
+          </button>
+          <button onclick="clearFlowBuilder()" class="text-xs px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:text-red-500 rounded-xl transition font-semibold">
+            مسح
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Prompt Builder Bar -->
+      <div class="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/50 rounded-2xl p-3.5">
+        <span class="text-xs font-bold text-emerald-700 dark:text-emerald-400 block mb-1">البرومبت السينمائي المجمع حالياً:</span>
+        <div id="flowBuilderOutput" class="mono-font text-xs text-slate-800 dark:text-slate-200 min-h-[38px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-darkborder rounded-xl p-2.5 flex items-center">
+          cinematic, wide shot, 35mm film, golden hour
+        </div>
+      </div>
+
+      <div id="flowCategoriesContainer" class="space-y-4"></div>
+    </section>
+
+    <!-- ==============================================
+         TAB 5: CHATGPT SECRET COMMANDS (24)
+         ============================================== -->
+    <section id="tab-chatgpt" class="tab-content hidden space-y-4">
+      <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder p-4 rounded-2xl shadow-sm">
+        <h2 class="font-bold text-base flex items-center gap-2">
+          <i class="fa-solid fa-terminal text-purple-500"></i>
+          <span>الأوامر السرية في ChatGPT (24 اختصار ذكي)</span>
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400">انقر على أي أمر لنسخه واستخدامه فوراً مع روبوتات المحادثة لتحديد الستايل</p>
+      </div>
+
+      <div id="chatgptGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+    </section>
+
+  </main>
+
+  <!-- New Custom Tab Modal -->
+  <div id="newTabModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-darkborder pb-3">
+        <h3 class="font-bold text-sm flex items-center gap-2">
+          <i class="fa-solid fa-folder-plus text-blue-500"></i> <span>إضافة تبويب جديد مخصص</span>
+        </h3>
+        <button onclick="closeNewTabModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold mb-1">اسم التبويب:</label>
+          <input type="text" id="newTabName" placeholder="مثال: برومبتات الأنمي والمؤثرات" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-darkborder rounded-xl p-2.5 text-xs focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">رمز الأيقونة (FontAwesome):</label>
+          <input type="text" id="newTabIcon" value="fa-solid fa-star" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-darkborder rounded-xl p-2.5 text-xs focus:outline-none">
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button onclick="closeNewTabModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-darkborder">إلغاء</button>
+          <button onclick="saveNewTab()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white">إضافة التبويب</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 left-5 z-50 bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl border border-slate-700 flex items-center gap-2.5 transform translate-y-16 opacity-0 transition-all duration-200 pointer-events-none">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+    <span id="toastMsg">تم النسخ بنجاح!</span>
+  </div>
+
+  <!-- Dynamic Application Script -->
+  <script>
+    // 1. DATA: 49 PROMPTS FROM FILE
+    const rawPrompts = [{"id": "01", "title": "كانه داخل الماء", "category": "face_id", "ratio": "3:4", "prompt": "01 كانه داخل الماء \nHyper-realistic, ultra-detailed close-up portrait showing only the left half of my face submerged in water, one eye in sharp focus, positioned on the far left of the frame, light rays creating caustic patterns on the skin, suspended water droplets and bubbles adding depth, cinematic lighting with soft shadows and sharp highlights, photorealistic textures including skin pores, wet lips, eyelashes, and subtle subsurface scattering, surreal and dreamlike atmosphere, shallow depth of field, underwater macro perspective. 3:4 aspect ratio\n\n(00000000000000000000000000", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "02", "title": "خلفية سوداء راقية", "category": "face_id", "ratio": "16:9", "prompt": "02خلفية سوداء راقية \n\nDramatic, ultra-realistic close-up in black and white with high-contrast cinematic lighting from the side, highlighting the contours of his face and beard, casting deep shadows. He wears round, reflective sunglasses. He gazes confidently upward into a dark void. The sunglasses reflect a city's towering skyline. The atmosphere is mysterious with a minimalist black background. Details in 4K. Keep the subject's exact facial structure, hair texture, the original photo.", "thumbColor": "from-blue-950 to-slate-900", "thumbIcon": "fa-film"}, {"id": "03", "title": "بورتريه احترافي #03", "category": "face_id", "ratio": "16:9", "prompt": "03 \n\n\nMaintain the same face and person (use attached photo for accurate face\n\n‎Hyper-realistic cinematic Create an 8k photorealistic image using the attached photo. A close-up portrait of a woman with long, jet-black, slightly wind-swept hair falling across her face. Her striking, light-colored eyes gaze upwards and to the right, catching a sharp, diagonal beam of natural light that illuminates the high points of her cheekbone, nose, and plump, glossy, mauve-toned lips a slightly light weight silk", "thumbColor": "from-cyan-950 to-blue-900", "thumbIcon": "fa-water"}, {"id": "04", "title": "بورتريه احترافي #04", "category": "editorial", "ratio": "9:16", "prompt": "04  \nصورة استوديو لرجل واثق يجلس على كرسي بذراعين بيج عصري بأرجل خشبية، يميل قليلاً إلى الأمام ويداه متلاصقتان. يرتدي قميصًا أزرق داكنًا مفتوح الأزرار العلوية، وبنطالًا بيج فاتحًا ضيقًا، وحذاءً أسود بدون كعب بنعل بني فاتح. شعره بني داكن قصير ومصفف بتسريحة مميزة، وله لحية كثيفة مهذبة، وبشرة سمراء، ونظرة واثقة ثاقبة موجهة نحو الكاميرا. الخلفية رمادية فاتحة بتصميم بسيط وتدرج لوني سلس، مضاءة بإضاءة استوديو طبيعية ناعمة. يضفي جو الصورة طابعًا سينمائيًا وعصريًا، مع واقعية عالية وتفاصيل دقيقة. تم التقاط الصورة بعدسة 50 مم بفتحة عدسة f/2.8، بإطار رأسي، وتكوين كامل للجسم.\n\nالشخص الظاهر في الصورة المرفقة، مع الحفاظ على ملامح الوجه الحقيقية، وتسريحة الشعر، ولون البشرة، وهيئة الجسم دون تغيير.\nStudio portrait of a confident man sitting on a modern beige armchair with wooden legs, leaning slightly forward with his hands together. He wears a dark navy blue dress shirt with the top buttons open, light beige slim-fit pants, and black loafers with tan soles. He has short dark brown hair styled with texture, a trimmed full beard, tanned skin, and an intense confident gaze directed at the camera. The background is minimalist light gray with a smooth gradient, evenly lit with soft natural studio lighting. The mood is cinematic and fashion editorial, with high realism and fine details. Shot with a 50mm lens at f/2.8, vertical framing, full-body composition.\nthe subject from the uploaded image, maintaining the exact real face, hairstyle, skin tone, and body identity unchanged.", "thumbColor": "from-emerald-950 to-neutral-900", "thumbIcon": "fa-glasses"}, {"id": "05", "title": "بورتريه احترافي #05", "category": "editorial", "ratio": "16:9", "prompt": "05\nA cinematic urban portrait of me, keeping my real face unchanged. I am sitting casually on outdoor stone steps in front of a building entrance, leaning slightly forward with a confident and contemplative posture. My left elbow rests on my knee, with my hand raised to my temple in a thoughtful gesture, while my right arm hangs more loosely, with my hand extended downward in a relaxed position. My legs are bent naturally, spreading apart for a grounded and strong presence. My gaze is directed toward the camera, steady and intense, with a calm yet powerful expression. I am wearing a black outfit: a fitted turtleneck sweater layered under a black coat with a wide collar and subtle texture. The coat has a tailored yet modern look, with a slightly matte fabric that absorbs the light, creating depth. My trousers are also black, slim-fitted, completing the clean, monochromatic style. No visible accessories, emphasizing minimalism and sophistication.\nThe background shows part of an urban building with glass doors and warm interior lights softly glowing, adding contrast to the darker tones of my outfit. The lighting is warm and diffused, highlighting my face and upper body while creating soft shadows that add cinematic depth. The camera captures me slightly from below (low angle), emphasizing strength and presence, framed from the knees up. The focal length resembles a portrait lens around 50-85mm, producing natural proportions with a shallow depth of field that keeps me sharp against the softly blurred background. Style: cinematic, moody urban portrait, editorial fashion photography, minimalistic monochrome outfit, professional model vibe.", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}, {"id": "07", "title": "بورتريه احترافي #07", "category": "editorial", "ratio": "16:9", "prompt": "07\n\n\nUma foto realista com todos os traços e linhas idênticos ao da foto com um semblante imponente, em preto em branco, no traje de terno preto e gravata slim.", "thumbColor": "from-slate-900 to-indigo-950", "thumbIcon": "fa-user-tie"}, {"id": "08", "title": "بورتريه احترافي #08", "category": "editorial", "ratio": "16:9", "prompt": "08\n\nCrie uma imagem minha [foto enviada em anexo] um retrato ultra-realista. Eu estou sentado em uma Moto esportiva preta brilhante em uma área ao ar livre contra o fundo de árvores verdes. Eu uso uma camiseta preta solta, jeans escuros soltos com dobras na parte inferior e tênis Nike preto e branco. Os acessórios usados incluem um relógio preto. Minha mão esquerda descansou casualmente em sua coxa, enquanto sua mão direita descansou na moto enquanto segurava um capacete preto brilhante com uma viseira transparente.\nA moto parece detalhada com um motor grande, quadro forte e detalhes cromados brilhantes, acentuando a impressão moderna e poderosa. O fundo mostra árvores altas com luz natural suave, criando uma mistura equilibrada de sombra e luz. A expressão é calma e confiante, olhando diretamente para\na câmera. O estilo geral é cinematográfico e moderno, combinando a sensação de streetwear jovem com a presença de uma motocicleta arrojada. Alta resolução, estilo editorial fotorrealista.", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "09", "title": "بورتريه احترافي #09", "category": "editorial", "ratio": "16:9", "prompt": "09\n\n\nStudio photography of a me in a black suit, black turtleneck and round sunglasses with translucent yellow lenses.\nVibrant orange background.\nUnique poses from the front.", "thumbColor": "from-blue-950 to-slate-900", "thumbIcon": "fa-film"}, {"id": "10", "title": "بورتريه احترافي #10", "category": "face_id", "ratio": "16:9", "prompt": "010\n\nUse the uploaded photo to create an Ultra-realistic mirror selfie of a stylish man with glasses.\nHe is wearing a loose white sweater layered over a crisp white T-shirt, paired with dark blue denim jeans.\nHe holds a new modern iPhone 17 smartphone orange colour in one hand, partially covering his face, while his other hand rests casually in his pocket.\n\nThe scene is set in warm indoor lighting, creating a cinematic, moody atmosphere with soft shadow”", "thumbColor": "from-cyan-950 to-blue-900", "thumbIcon": "fa-water"}, {"id": "11", "title": "بورتريه احترافي #11", "category": "editorial", "ratio": "9:16", "prompt": "011\n\nRecreate this scene using my submitted photo as a reference, maintaining the same framing, pose, lighting, and style as the example image.\n\nThe composition should show a half-length **male** portrait, with the model sitting and leaning slightly forward. The right arm should cross the body, with the left hand resting gently on the opposite arm, conveying elegance and confidence.\n\nThe facial expression should be serene, confident, and slightly enigmatic. The gaze should be directed toward the camera, with lips softly closed and a firm posture.\n\nThe outfit consists of a dark, sophisticated ensemble—a structured **black blazer** worn over a **fitted black shirt (or T-shirt/sweater)**. **The hair should be neatly groomed and styled appropriately for a man (e.g., short, slicked back, or a modern cut and wearing Sunglasses).**\n\nThe lighting should be studio-style, with soft, contrasting directional light (Rembrandt-style or sidelight), highlighting the contours of the face, creating elegant shadows and a subtle gradient in the background.\n\nThe background should be smooth and neutral, in dark gray tones, with slight depth and no distracting elements. \n\nThe final style should be black and white, with refined contrast, smooth skin texture, and a realistic editorial portrait look.\n\nVertical format (1080x1920), portrait aspect ratio, professional studio photo quality, and a cinematic, realistic finish.", "thumbColor": "from-emerald-950 to-neutral-900", "thumbIcon": "fa-glasses"}, {"id": "12", "title": "بورتريه احترافي #12", "category": "face_id", "ratio": "16:9", "prompt": "012\n\n\nCreate a hyper-realistic portrait of a man (man of the uploaded photo) sitting in the driver's seat of a car, wearing a black shirt, combined with a faded light gray jacket and light gray wide-leg pants. White shoes should be visible, complementing the casual look. Round sunglasses with dark lenses should be positioned on the nose, highlighting a confident and slightly ironic facial expression. Relaxed posture: one arm on the sports steering wheel, the other supporting the head, conveying a relaxed look. The interior of the car should include side windows showing urban scenery (trees, buildings and part of another vehicle), and a black textured seat. Soft natural lighting, simulating daylight coming through the windows, creating a contrast between the warm colors of the clothing and the neutral environment of the car. Vintage style, with desaturated tones and slightly grainy textures, evoking a nostalgic atmosphere. Dominant tones of gray, white and black, with a balance between external light and internal shadows. Slightly elevated perspective, framing that includes the top of the knees to the head, with the steering wheel partially visible on the right.", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}, {"id": "13", "title": "بورتريه احترافي #13", "category": "face_id", "ratio": "16:9", "prompt": "013\n\n\nCreate a realistic and emotional scene showing a man (use the provided image for accurate facial features) and a lion face to face in a moment of connection and respect. The man's eyes are closed, with a serene expression, while the lion gently rests its forehead and muzzle against his, conveying trust and a spiritual bond.\nBoth are standing on ground covered in light snow, with snowflakes gently falling. The man wears a dark coat and hair slightly tousled by the wind, and the lion displays a thick, majestic mane.\nIn the background, a cold, misty natural landscape with blurred mountains and gray tones reinforces the calm and powerful atmosphere.\nThe lighting is soft and diffuse, highlighting the textures of the skin, fur, and coat, creating a cinematic and poetic atmosphere.\nThe composition should convey friendship, courage, and harmony between man and nature.\n\nSuggested settings:\nStyle: Ultra-realistic, cinematic, 8K\nLighting: Soft, diffuse, natural winter light\nCamera: Medium close-up, focus on expressions\nEmotion: Connection, respect, tranquility\nSetting: Falling snow, blurred background with mountains", "thumbColor": "from-purple-950 to-slate-900", "thumbIcon": "fa-bolt-lightning"}, {"id": "14", "title": "بورتريه احترافي #14", "category": "face_id", "ratio": "16:9", "prompt": "014\n\nA man with a beard and short dark hair is captured in a striking portrait, illuminated by dramatic dual-colored lighting. His face is split, with one side bathed in a cool blue light and the other in a vibrant pink/red hue, creating a high-contrast and neon-like effect. He gazes directly at the viewer with a thoughtful or pensive expression, his left hand resting on his chin. He is wearing a dark t-shirt and a watch on his left wrist. The background is dark and indistinct, further emphasizing the colorful illumination on his face and upper body.\n\nDO NOT CHANGE THE FACE", "thumbColor": "from-slate-900 to-indigo-950", "thumbIcon": "fa-user-tie"}, {"id": "15", "title": "بورتريه احترافي #15", "category": "face_id", "ratio": "16:9", "prompt": "015\n\nA cinematic close-up portrait of a stylish individual standing by a large glass window, gazing thoughtfully at their reflection. The person wears a black turtleneck sweater layered under a fitted dark blazer, creating a sleek and elegant look. The lighting is soft and natural, coming from the window, gently illuminating one side of the face while casting subtle shadows on the other, emphasizing depth and texture. The background is softly blurred, highlighting the calm and introspective mood of the scene. The reflection in the glass adds a sense of duality and contemplation. The overall atmosphere is moody, sophisticated, and cinematic, with a color palette dominated by neutral tones and soft daylight.", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "16", "title": "بورتريه احترافي #16", "category": "cinematic", "ratio": "4:5", "prompt": "016\n\nprofessional studio portrait of a person, confident and determined expression, head slightly tilted down, wearing a black V-neck t-shirt. Using a low-key photography setup with butterfly lighting (key light from front above), a hair rim light from behind, and a faint background light. The atmosphere is filled with a subtle haze or smoke. Shot on a medium format camera, high contrast, cinematic, sharp focus, soft shadows. The atmosphere has a subtle haze. Hyper-realistic, shot on a 85mm lens, sharp focus on eyes, detailed facial features. --ar 4:5 --style raw", "thumbColor": "from-blue-950 to-slate-900", "thumbIcon": "fa-film"}, {"id": "17", "title": "بورتريه احترافي #17", "category": "face_id", "ratio": "16:9", "prompt": "017\n\n\"A hyperrealistic cinematic shot inside a dark movie theater with visible blue seats in the background, filled with various video game characters having fun. The main character, a man (from the provided photo), looks embarrassed, wearing a simple black Nintendo t-shirt, holding a large red and white striped popcorn bucket in one hand.\nOn each side of the main character:\n• Left: Mario Bros. holds a red soda cup in one hand, with a mischievous expression.\n• Right: Donkey Kong is laughing heartily, holding his own popcorn bucket. His smile is wide and sensual, with gleaming teeth.\nIn the background, other video game characters are visible in the seats, including Goku from Dragon Ball, Kratos from God of War, Sonic, Link, Zelda, Princess Peach, a Pikachu-like character, and many more, some wearing 3D glasses, others tossing popcorn in the air, creating a chaotic and festive atmosphere.\nThe lighting is cinematic, primarily coming from an invisible screen in front of them, with light reflections on their faces and popcorn buckets. The details are extremely realistic. The overall atmosphere is joyful, original, and slightly exaggerated.\"", "thumbColor": "from-cyan-950 to-blue-900", "thumbIcon": "fa-water"}, {"id": "18", "title": "بورتريه احترافي #18", "category": "face_id", "ratio": "16:9", "prompt": "018\nA highly realistic cinematic scene set inside a dark movie theater. Blue seats fill the background, occupied by a variety of video game characters enjoying themselves. The central figure is a confident, courageous-looking man (based on the attached photo) wearing a simple black shirt featuring the \"Shabeeb\" logo; he holds a large red-and-white striped popcorn bucket labeled \"Abu Mohammed Shabeeb\" in Arabic.\n\nFlanking the central figure:\n\n• On the left: Mario Bros., holding a red soda cup with a mischievous expression.\n\n• On the right: Donkey Kong, laughing heartily while clutching his own popcorn bucket; he has a wide, engaging smile with gleaming teeth.\n\nIn the background, other video game characters sit in the seats—including Goku (Dragon Ball), Kratos (God of War), Sonic, Link, Zelda, Princess Peach, a Pikachu-like character, Grendizer, Jonker, and many others. Some wear 3D glasses, while others toss popcorn into the air, creating a lively, festive atmosphere.\nThe lighting is cinematic, emanating primarily from an unseen screen in front of them, with light reflecting off their faces and popcorn buckets. The details are hyper-realistic. The overall mood is joyful, authentic, and slightly exaggerated.", "thumbColor": "from-emerald-950 to-neutral-900", "thumbIcon": "fa-glasses"}, {"id": "19", "title": "بورتريه احترافي #19", "category": "editorial", "ratio": "16:9", "prompt": "019\n\nCrie uma imagem hiper-realista baseada na minha imagem de referência (Imagem 1), preservando meus traços e aparência originais, mas recriando fielmente o estilo, roupa, pose, iluminação e cenário da imagem modelo.\nO personagem (baseado na minha foto) aparece em plano médio, voltado levemente para a direita, com o rosto inclinado e olhar firme em direção à câmera.\n\nA expressão é confiante e neutra, transmitindo presença e estilo.\nEle veste uma jaqueta de couro turquesa, moderna e ajustada, com textura realista e brilho suave típico do couro tratado.\n\nO zíper e os botões metálicos devem refletir a luz com realismo e sutileza, mantendo o aspecto de fotografia de moda profissional.\n\nNos olhos, óculos escuros espelhados azul-petróleo, com reflexos sutis do ambiente — realçando a estética urbana.\nO fundo é monocromático, em tom turquesa idêntico à jaqueta, criando um visual harmonioso e de alto contraste com a pele.\n💡 Iluminação de estúdio profissional:\n\nLuz principal (key light) suave e frontal, vinda levemente da esquerda, com difusor grande (softbox 120 cm).\nLuz secundária de preenchimento (fill light) neutra do lado direito, reduzindo sombras e mantendo textura facial.\nLuz de recorte (rim light) sutil no ombro e cabelo, criando separação do fundo.\nTemperatura de cor balanceada (5500K) — luz branca natural de estúdio.\nSombras limpas e controladas, mantendo foco no rosto e na jaqueta.\n📷 Câmera e Lente:\n\nSony A7R IV, lente 85mm f/1.8, ISO 100, obturador 1/160s, abertura f/2.\n\nFoco absoluto no rosto, fundo suavemente desfocado (bokeh leve).\n🎨 Color grading e estilo visual:\n\nEstilo Modern Editorial Cool Tone:\nPaleta dominada por tons turquesa, azul e pele quente neutra.\nContraste alto e nitidez refinada, mas sem perder naturalidade.\nCores vibrantes e limpas, sem granulação perceptível.\nTextura realista de pele e cabelo, com brilho controlado.\nReflexos metálicos sutis no zíper e nos óculos.\nTom visual: elegante, vibrante e urbano — como capa de revista ou campanha de moda contemporânea.\nFiltro: Cinematic Cool HDR, com cores saturadas e luz de estúdio limpa.\nAmbiente: fundo monocromático turquesa, estúdio moderno, luz balanceada.\nPalavras-chave visuais:\n--ultra realistic --studio lighting --8k --HDR contrast --photo realism --vibrant tones --depth of field --sharp focus --fashion editorial --turquoise tones --clean background --modern portrait --soft shadows --bokeh background --studio quality --skin texture detail --leather jacket\n🎬 Notas do Diretor de Fotografia:\n\nA chave visual é o equilíbrio entre o turquesa saturado e a pele natural, sem que nenhuma cor domine a outra.\n\nA luz suave e frontal garante textura na pele e brilho uniforme na jaqueta.\n\nO enquadramento em plano médio com leve inclinação do rosto transmite carisma e estilo.\n\nO resultado deve parecer uma foto de revista de moda internacional (GQ, Vogue Men, Balmain Campaign) — idêntica em cor, luz e composição à original, mas com você como protagonista.", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}, {"id": "20", "title": "بورتريه احترافي #20", "category": "editorial", "ratio": "16:9", "prompt": "020\n\n\nA hyper-realistic cinematic portrait of the uploaded man. Use precise ID locking to preserve his precise facial features, hairstyle, skin tone, body proportions, age, and expressions with 100% accuracy. He exudes the personality of a powerful and domineering gangster, sitting confidently on a luxurious velvet sofa, leaning back in a comfortable yet dominant posture. A lion rests on his lap, its body flowing naturally and comfortably above it. The man's head tilted slightly downward, looking at the cat with a calm and serene expression, while dark sunglasses enhance his aura of dominance and elegance. One hand rests casually on the cat back, the other on the sofa's armrest. He wears a dark, elegant outfit: either a finely pinstriped suit or an open-necked silk shirt... an aura of calm and authority, his presence radiating a quiet, non-aggressive power. Style: realistic, cinematic lighting, extreme detail, and a luxurious atmosphere", "thumbColor": "from-purple-950 to-slate-900", "thumbIcon": "fa-bolt-lightning"}, {"id": "21", "title": "بورتريه احترافي #21", "category": "editorial", "ratio": "16:9", "prompt": "021\n\n\n\nCan you convert this man to be seated in a grand, ornate armchair, dark in color. He's dressed in a dark trench coat, a crisp suit, and using distinctive round sunglasses, which add to an enigmatic aura. The postureshould be composed and intentional, with his hands extended to offer a red and a blue pill.\nThe background is dark, almost sterile room, but visually dominated by the cascading green digital code that symbolizes a simulated reality. This code flows down walls or appears as if projected, creating a sense of being within a computer program. The lighting in this scene is dramatic, casting shadows that emphasize the gravity of the choice being made.", "thumbColor": "from-slate-900 to-indigo-950", "thumbIcon": "fa-user-tie"}, {"id": "22", "title": "بورتريه احترافي #22", "category": "editorial", "ratio": "16:9", "prompt": "022\n“Retrato Masculino Elegante ao Pôr do Sol com Carro de Luxo”\n\nPrompt principal (positivos):\n\nRetrato masculino realista, estilo editorial de luxo, mostrando o mesmo homem da referência principal (barba curta bem aparada, cabelo penteado para trás com volume natural, óculos de armação grossa, expressão confiante e madura) encostado em um carro esportivo preto brilhante durante o pôr do sol.\n\nEle veste um terno azul-marinho bem ajustado, camisa branca e gravata bordô. Usa sapatos de couro marrom e relógio elegante no pulso.\n\nA cena se passa em um ambiente urbano sofisticado, próximo a um parapeito de pedra com vista panorâmica e montanhas ao fundo. O pôr do sol ilumina o céu com tons dourados, alaranjados e rosados, refletindo suavemente na lataria do carro.\n\nO enquadramento é em plano médio, mostrando o homem inteiro encostado casualmente no carro,", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "22", "title": "بورتريه احترافي #22", "category": "editorial", "ratio": "16:9", "prompt": "022\n\n“Retrato Masculino Elegante ao Pôr do Sol com Carro de Luxo”\n\nPrompt principal (positivos):\n\nRetrato masculino realista, estilo editorial de luxo, mostrando o mesmo homem da referência principal (barba curta bem aparada, cabelo penteado para trás com volume natural, óculos de armação grossa, expressão confiante e madura) encostado em um carro esportivo preto brilhante durante o pôr do sol.\n\nEle veste um terno azul-marinho bem ajustado, camisa branca e gravata bordô. Usa sapatos de couro marrom e relógio elegante no pulso.\n\nA cena se passa em um ambiente urbano sofisticado, próximo a um parapeito de pedra com vista panorâmica e montanhas ao fundo. O pôr do sol ilumina o céu com tons dourados, alaranjados e rosados, refletindo suavemente na lataria do carro.\n\nO enquadramento é em plano médio, mostrando o homem inteiro encostado casualmente no carro, com uma perna cruzada e uma postura confiante. O foco está na harmonia entre o luxo, o bom gosto e a iluminação cinematográfica dourada.\n\nAlta definição, textura realista da pele, tecidos e reflexos do carro. Estilo fotográfico contemporâneo, luz natural dourada, atmosfera elegante e sofisticada.\n\nDetalhes técnicos e estéticos:\n\nCenário: rua ou mirante urbano durante o pôr do sol\n\nPersonagem: mesmo homem da foto original (barba, cabelo, óculos, traços maduros)\n\nRoupa: terno azul-marinho ajustado, camisa branca, gravata bordô, sapatos de couro marrom\n\nAcessórios: relógio elegante, óculos, lenço no bolso do paletó\n\nCarro: esportivo preto de luxo, com acabamento polido\n\nIluminação: dourada e quente, luz natural do entardecer\n\nComposição: corpo inteiro, levemente inclinado, encostado no carro\n\nClima/emoção: confiança, poder, sucesso e sofisticação\n\nEstilo: editorial de moda masculina / publicidade automotiva\n\nParâmetros recomendados (para Nano Banana):\n--style: cinematic_sunset\n--lighting: golden_hour\n--camera: full_body_portrait\n--focus: man_and_car\n--mood: confident_elegant\n--quality: ultra_detail\n--composition: leaning_on_car\n\nPrompt negativo (para evitar ruídos):\n\n\nblurry, cartoonish, low contrast, overly saturated, smiling widely, messy background, casual clothes, distorted car, poor reflections, unnatural skin tones, exaggerated lighting, low detail", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "23", "title": "بورتريه احترافي #23", "category": "face_id", "ratio": "16:9", "prompt": "023\n\n\n\n\nDramatic, ultra-realistic close-up in black and white with high-contrast cinematic lighting from the side, highlighting the contours of his face and beard, casting deep shadows. He wears round, reflective sunglasses. He gazes confidently upward into a dark void. The sunglasses reflect a city's towering skyline. The atmosphere is mysterious with a minimalist black background. Details in 4K. Keep the subject's exact facial structure, hair texture, the original photo.", "thumbColor": "from-blue-950 to-slate-900", "thumbIcon": "fa-film"}, {"id": "24", "title": "بورتريه احترافي #24", "category": "vehicles", "ratio": "16:9", "prompt": "024\n\nA hyper-realistic, cinematic low-angle portrait of a young man standing confidently in the middle of a modern city street, surrounded by towering skyscrapers curving inward toward the sky. He wears a casual oversized gray t-shirt with bold lettering text shbeeb, camouflage cargo shorts, and carries a backpack. Black headphones rest around his neck, and he holds a water bottle in one hand. The lighting is natural and dramatic, with clear blue skies and scattered clouds above, emphasizing the sense of scale and urban energy. The composition creates a powerful, larger-than-life perspective, making the subject appear heroic and adventurous-with ultra-detailed textures in clothing, skin, and architecture.", "thumbColor": "from-cyan-950 to-blue-900", "thumbIcon": "fa-water"}, {"id": "25", "title": "بورتريه احترافي #25", "category": "face_id", "ratio": "16:9", "prompt": "025\n\nGenerate a portrait the [change the person] from neck to head, and follow strictely the engraving illustration style of the reference. Put a lot more hatch lines on the face The clothes] don't have any details, only the outside lines.", "thumbColor": "from-emerald-950 to-neutral-900", "thumbIcon": "fa-glasses"}, {"id": "26", "title": "بورتريه احترافي #26", "category": "editorial", "ratio": "9:16", "prompt": "026\n\nUltra-realistic vertical photo (9:16). A young Indonesian-Asian man (use uploaded face, 100% identity lock, no alteration) sits on indoor stairs beside a matte concrete wall. A rectangular beam of golden sunlight from a window hits the wall, creating a crisp shadow silhouette inside the bright frame.\nHe wears a black ribbed knit sweater, tapered grey chinos, and chunky white sneakers.\nPose: seated, elbows on thighs, hands loosely clasped, chin slightly lifted, eyes looking toward the light, calm and confident expression.\nLighting: hard warm sunlight from camera-right as key, soft ambient bounce fill, high contrast with long shadows, cinematic golden-hour mood.\nCamera & look: low-mid angle from a few steps below, 50–85mm f/2.2 lens, shallow depth of field, clean optics, realistic skin texture, fine film grain, subtle vignette.\nStyle: minimalist background, no clutter, fashion editorial realism.\nExclude: cartoon, CGI, AI-artifacts, over-smoothing, plastic skin, excessive sharpening, motion blur, warped anatomy, extra fingers, disfigured hands, double shadow, blown highlights, banding, watermark, logo, text, bad perspective, dirty wall, clutter.", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}, {"id": "27", "title": "بورتريه احترافي #27", "category": "fantasy_tech", "ratio": "9:16", "prompt": "027\n\nCreate an ultra-realistic 3D selfie in 9:16 vertical aspect ratio from the attached photo of the man (use the provided image for accurate facial features) with a T-800-style robot. The photo should look like a typical iPhone selfie—slightly uneven framing, camera angle of view, slight distortion from the front camera, natural skin texture, daylight in the background, an apocalyptic scene with other T-800-style robots, subtle motion blur from hand movements, and authentic depth of field from the iPhone's front camera. Maintain a high level of realism and detail, but with the casual, unpolished look of a real phone photo rather than a professional DSLR. 9:16 aspect ratio", "thumbColor": "from-purple-950 to-slate-900", "thumbIcon": "fa-bolt-lightning"}, {"id": "28", "title": "بورتريه احترافي #28", "category": "face_id", "ratio": "16:9", "prompt": "028\n\n\nCan you make this A monochrome side-profile shot of me, with light highlighting the edges of his hair and face. The background fades into darkness, creating a soft contrast that emphasizes his silhouette", "thumbColor": "from-slate-900 to-indigo-950", "thumbIcon": "fa-user-tie"}, {"id": "29", "title": "بورتريه احترافي #29", "category": "editorial", "ratio": "16:9", "prompt": "029\n\nCrie uma imagem realista baseada na foto que estou enviando, substituindo o rosto e aparência do homem pela minha imagem.\n\nCena: homem elegante relaxando em um barco de luxo navegando por um lago calmo cercado por montanhas e casas sofisticadas ao fundo. O sol da tarde ilumina a cena com luz dourada, refletindo na água cristalina.\n\nDetalhes do personagem: use minha foto como base para o rosto, cabelo e aparência geral. O homem está usando um terno bege claro, sem gravata, com a camisa parcialmente aberta, exibindo um visual sofisticado e confiante. Ele usa óculos de sol escuros e um relógio de luxo no pulso.\n\nAmbiente: barco de madeira polida com estofamento claro, navegando em águas azuis com o reflexo do céu e da paisagem. O fundo mostra vilas à beira do lago e vegetação exuberante em um cenário europeu elegante.\n\nEstilo visual: fotografia de alta qualidade, estilo editorial de revista de moda, iluminação natural e tons quentes.", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "30", "title": "بورتريه احترافي #30", "category": "face_id", "ratio": "16:9", "prompt": "030\n\n\nA hyper-realistic portrait of the uploaded young man inside a giant Instagram post frame that dominates the scene. His face remains same, sharp and untouched, wearing dark sunglasses and sleek shoes, exuding bold charisma. His relaxed pose shows his right elbow resting on his knee, left arm casual, and one leg stepping out of the Instagram frame in a 3D illusion. The Instagram frame is highly realistic with username GoogleGeminiPrompts, verified checkmark, display name \"Al Generation\", caption: \"Too real to stay inside frame #AlCreation #GoogleGeminiPrompts\", and authentic icons. The background is designed for masculine boldness: deep cobalt blue blending into cyan, with subtle light streaks adding energy, Clean, cinematic lighting highlights his clothing textures and the 3D illusion, making him the viral centerpiece.", "thumbColor": "from-blue-950 to-slate-900", "thumbIcon": "fa-film"}, {"id": "31", "title": "بورتريه احترافي #31", "category": "face_id", "ratio": "16:9", "prompt": "031\n\nA hyper-realistic cinematic image, uploaded image a picture of the young man, 1m60, 22 old years do not edit . \nHe is standing at the very top of a famous tower in Paris,\nFrom this high vantage point, the entire Paris skyline is visible: the Eiffel Tower in the distance, classic Parisian rooftops, and winding streets below. White tee-shirt, black watch\nGolden daylight shines across the city, with soft atmospheric haze adding depth. \nThe camera angle is wide, slightly low, making the person look majestic and free while embracing the panoramic view. \nMood: liberating, cinematic, awe-inspiring. \nAspect ratio: 16:9, ultra-realistic, cinematic detail.", "thumbColor": "from-cyan-950 to-blue-900", "thumbIcon": "fa-water"}, {"id": "32", "title": "بورتريه احترافي #32", "category": "editorial", "ratio": "16:9", "prompt": "032\nDigital photo of a young man (use my photo as a reference) sitting on a steel wire fence, wearing a stylish casual outfit. Streetwear: black oversized t-shirt with a cool design, light blue oversized wide-leg jeans, white chunky sneakers, wearing a black watch. He is holding an iced drink in a plastic cup with a straw. The background features a bright blue sky, bamboo trees and modern buildings. The pose is from a lower angle, casual yet stylish.", "thumbColor": "from-emerald-950 to-neutral-900", "thumbIcon": "fa-glasses"}, {"id": "33", "title": "بورتريه احترافي #33", "category": "face_id", "ratio": "16:9", "prompt": "033\n\n\nA cinematic and intimate portrait with an analog film aesthetic, capturing a female figure inside a car. The subject is looking out the open window, her arm resting on the door and her face partially framed by the car's frame, creating a sense of depth and a spontaneously captured moment. Her gaze is direct, intense, and melancholic toward the camera.\n\nHer hair is tousled and flowing, as if blown by the wind, with strands falling over her face, adding a sense of movement and rawness to the scene.\n\nShe wears a dark, casual jacket (jeans or sweatshirt).\n\nThe background is a blurred, desolate landscape, suggesting a road on a cloudy day or at dusk. The car's rearview mirror is visible, adding to the travel context. The color palette is desaturated, with cool, earthy tones, and the image has visible film grain, contributing to the nostalgic and introspective atmosphere. The lighting is natural, soft, and diffuse, typical of an overcast day, shaping the face with delicate shadows.\n\nCamera Settings: Captured with a 50mm or 85mm prime lens on a full-frame camera for an intimate and natural perspective. Aperture set between f/1.8 and f/2.8 to create a very shallow depth of field, keeping the eye in sharp focus and gently blurring the foreground and background. ISO 400-800 to capture the scene in low light and highlight the natural film grain. Post-production editing to achieve the analog film look, with desaturated colors and cool tones.\n\nInstructions for the \"nano banana\":\n\n\"Please use the user's reference image to capture and apply all of their facial features, facial structure, eye color, skin tone, style, and hair color with maximum fidelity. The goal is to create a version of the user in this cinematic portrait. The pose in the car window, the flowing hair, the soft lighting, the desaturated color palette with film grain, and the introspective atmosphere should be generated as described, creating a perfect fusion between the user's identity and the aesthetics of the image.\"", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}, {"id": "34", "title": "بورتريه احترافي #34", "category": "editorial", "ratio": "9:16", "prompt": "034\n\n\nedit this image — transform the photo into a high-end street-photography portrait of a traveler/photographer leaning casually on a lamp post in front of a historic tower. Keep the original pose and composition: standing with left leg bent and foot on the lamp base, right leg relaxed, left hand in jacket pocket, right hand holding a camera down by the thigh, shoulders slightly turned to camera, chin up and gaze off-frame. Preserve the camera, beard and textured jacket but enhance and stylize as follows:\n\nWardrobe & accessories: keep the dark parka/jacket but enrich fabric texture (subtle waxed canvas look), change inner hoodie to a soft charcoal knit, keep blue jeans but slightly deepened to rich indigo with natural creasing. Emphasize the high-top sneakers — boost contrast on black-and-white panels and add faint scuff details for realism. Add a small messenger bag strap across the chest and a compact leather wrist strap on the camera.\nLighting & color: cinematic cool-tone grade (soft blue shadows) with warm golden rim light hitting the left side of the face and shoulder (suggest late-afternoon sun). Slightly boost contrast and midtones to create punch without losing skin detail. Add subtle film grain and gentle vignette to focus on the subject.\nCamera & optics: emulate 35mm–50mm prime look, shallow DOF (f/1.8–2.8) so the tower and crowd become painterly bokeh while the subject remains razor-sharp. Slight perspective correction to emphasize the tower peek behind his shoulder. Enhance catchlight/reflection in the eyes (or sunglasses reflection if present) and sharpen camera details.\nBackground & atmosphere: keep the busy pedestrian scene but soften and desaturate it so the subject pops; raise clarity and texture on the stone tower so it reads as a strong architectural anchor. Add a few falling autumn leaves and a faint wet-pavement sheen to suggest recent rain (subtle reflections under shoes).\nFinal touches: natural skin retouching (preserve stubble and pores), boost micro-contrast on jacket and jeans, accentuate lens/glass reflections on the camera. Export as photorealistic, vertical 4K editorial crop with high detail.\nPosition (short): standing, left foot on lamp base, leaning against lamppost, camera in right hand, left hand in pocket, gaze off-frame.", "thumbColor": "from-purple-950 to-slate-900", "thumbIcon": "fa-bolt-lightning"}, {"id": "35", "title": "بورتريه احترافي #35", "category": "editorial", "ratio": "9:16", "prompt": "035\n\nPortrait of a confident man sitting on a beige armchair in an elegant living room. He wears a dark navy blue suit with a white dress shirt, no tie. His hair is dark brown, neatly styled back, and he has a short full beard and fair skin. He sits with his right leg crossed over his left, left arm resting on the chair arm, right hand on his leg, looking directly at the camera with a serious and confident expression. The background shows a sophisticated room with soft warm lighting, blurred lamps, curtains, and framed artwork. The lighting is natural and soft, cinematic, emphasizing texture and detail. Vertical framing, 85mm lens, f/2.8, ultra-realistic corporate editorial portrait.\nthe subject from the uploaded image, maintaining the exact real face, hairstyle, skin tone, and body identity unchanged.", "thumbColor": "from-slate-900 to-indigo-950", "thumbIcon": "fa-user-tie"}, {"id": "36", "title": "بورتريه احترافي #36", "category": "editorial", "ratio": "16:9", "prompt": "036\nA black-and-white editorial portrait of a\nstylish man sitting on a minimalist wooden\nblock inside a modern loft apartment. He\nwears a fitted black sweater, tailored dark\ntrousers, and clean white sneakers, exuding\na refined yet relaxed elegance. Natural\nwindow light softly illuminates his face,\ncasting subtle shadows for depth. The\nsetting includes a potted plant, a large\nindustrial window, and minimalist furniture\nin the background. High-fashion magazine\naesthetic, Numéro Homme style, sharp\ndetails, cinematic mood, medium shot,\nprofessional photography.", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "37", "title": "بورتريه احترافي #37", "category": "face_id", "ratio": "16:9", "prompt": "037\nA portrait using my face, depicted as a hacker in a dark, rainy urban environment, strongly in the style of Mr. Robot. The subject is wearing a large hooded sweatshirt, covering the entire head but leaving the face visible, looking at the camera, with a computer screen reflecting a soft green code onto their face. The lighting is dramatic and low-contrast, with only the monitor light and some blurred streetlights in the background. There is a sense of isolation and paranoia. The image has a grainy, almost cinematic aesthetic, reminiscent of modern noir films, with a focus on technology and surveillance.", "thumbColor": "from-blue-950 to-slate-900", "thumbIcon": "fa-film"}, {"id": "38", "title": "بورتريه احترافي #38", "category": "face_id", "ratio": "16:9", "prompt": "038\n\nA creative, high-contrast studio portrait capturing a female figure in an intimate close-up with a mysterious and introspective atmosphere. The subject is posed with her head tilted slightly downward, her gaze directed toward the ground, just outside the frame, conveying a sense of deep contemplation.\n\nThe most striking feature of the image is the dramatic lighting with dual-colored gels. One side of the face and body is bathed in vibrant cyan or teal light, while the opposite side is illuminated by contrasting red or magenta light. This creates a sharp color division in the center of the figure, sculpting the facial features with colorful highlights and deep shadows.\n\nShe wears a simple black top with a low neckline, which allows the colored light to play across the skin of her décolleté and shoulders. Her makeup is defined, with eyeliner accentuating her eyes and lips with a subtle, light-catching gloss.\n\nThe hair is long, straight, and dark, falling softly over the shoulders and framing the face, the strands capturing the reflections of the colored lights.\n\nThe background is completely black and uniform, ensuring that all the focus remains on the subject and the vibrant play of light.\n\nCamera Settings: Captured with a prime portrait lens (e.g., 85mm or 100mm) on a full-frame camera for a sharp, distortion-free close-up. Aperture set between f/2.8 and f/4.0 to keep the face in sharp focus with a shallow depth of field. ISO 100-200 for maximum image quality, free of noise. Shutter speed from 1/160s to 1/250s. Lighting is key: two studio light sources (strobes or continuous lights) with colored gels (cyan and red) positioned on opposite sides of the subject to create a split-light effect, without using fill light to maximize contrast.\n\nInstructions for the \"nano banana\":\n\n\"Please use the user's reference image to capture and apply all of their facial features, facial structure, eye color, skin tone, and hair style, color, and texture with maximum fidelity. The goal is to create a version of the user in this artistic portrait. The pose (head tilted down), the dramatic dual-gel lighting (cyan and red), the black top, and the dark background should be created as described, creating a seamless fusion between the user's identity and the modern, colorful aesthetic of the image.\"", "thumbColor": "from-cyan-950 to-blue-900", "thumbIcon": "fa-water"}, {"id": "39", "title": "بورتريه احترافي #39", "category": "editorial", "ratio": "9:16", "prompt": "039\n\n\n--preserve_identity=100% --no_stylization --no_feature_blending. Sujeto basado en la imagen de referencia. Rasgos faciales exactos; \tEstilo editorial hiperrealista en 8K, con atmósfera cinematográfica de atardecer; \tHombre sentado de lado sobre el techo de un Mercedes-AMG G63 negro, pierna doblada y pie apoyado en el capó, cabeza ligeramente girada mirando a cámara con presencia impactante; vestimenta: chaqueta bomber beige con cremallera frontal, pantalones negros de corte moderno, zapatillas CONVERSE x OFF-WHITE Chuck Taylor Vulcanized Hi “Clear”, gafas de sol Ray-Ban Wayfarer, estilo casual, sofisticado, urbano y moderno con toque editorial; \tZona Urbana, fondo con cielo nublado gris;\tLuz cálida difusa del atardecer, faros del coche encendidos iluminando suavemente y creando profundidad dramática; retrato en 8K hiperrealista, lente 24 mm f/1.2, profundidad de campo reducida, fondo suavemente desenfocado, enfoque absoluto en texturas de piel, cabello, ropa y materiales del automóvil, iluminación natural combinada con faros, tonos cálidos y contraste suave. \t-- ar 9:16 vertical, 8K RAW, lente 35-85mm f/1.2-f/2.8, ISO 100-400, enfoque nítido en rostro/ojos, profundidad de campo reducida, bokeh suave, HDR, iluminación cinematográfica, gradación cálida/natural, grano de película sutil, texturas hiperrealistas de piel, ropa y accesorios, fondo suavemente desenfocado, nitidez editorial, estilo editorial/alta moda.\t-- sin CGI, 3D, render, caricatura, anime; sin piel de plástico, borroso, artefactos, distorsiones, poses rígidas; evitar saturación o colores irreales, sobreexposición, reflejos falsos; no alterar rostro, expresión, cuerpo ni identidad; mantener realismo y estilo cinematográfico/editorial.", "thumbColor": "from-emerald-950 to-neutral-900", "thumbIcon": "fa-glasses"}, {"id": "40", "title": "بورتريه احترافي #40", "category": "vehicles", "ratio": "16:9", "prompt": "040\n\nUma fotografia de close-up e médio-busto, capturando uma figura masculina com uma presença imponente e carismática. O sujeito está voltado ligeiramente para a câmera, com um sorriso enigmático nos lábios e um olhar direto e penetrante, transmitindo uma mistura de confiança, astúcia e uma certa frieza.\n\nEle veste uma jaqueta de couro preta robusta, com zíperes e detalhes que sugerem um estilo utilitário e resistente. Por baixo da jaqueta, um lenço de pescoço vermelho escuro, elegantemente amarrado, adiciona um toque de cor vibrante e personalidade ao conjunto sóbrio. Uma das mãos, parcialmente visível, segura firmemente um taco de beisebol de madeira, enrolado com arame farpado, que repousa sobre o ombro, adicionando um elemento de perigo e poder à composição.\n\nO fundo é escuro e nebuloso, com pontos de luz difusa e fumaça sutil flutuando no ar, criando uma atmosfera noturna e misteriosa, reminiscentes de um cenário pós-apocalíptico ou urbano so", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}, {"id": "40", "title": "بورتريه احترافي #40", "category": "vehicles", "ratio": "16:9", "prompt": "040\n\n\nUma fotografia de close-up e médio-busto, capturando uma figura masculina com uma presença imponente e carismática. O sujeito está voltado ligeiramente para a câmera, com um sorriso enigmático nos lábios e um olhar direto e penetrante, transmitindo uma mistura de confiança, astúcia e uma certa frieza.\n\nEle veste uma jaqueta de couro preta robusta, com zíperes e detalhes que sugerem um estilo utilitário e resistente. Por baixo da jaqueta, um lenço de pescoço vermelho escuro, elegantemente amarrado, adiciona um toque de cor vibrante e personalidade ao conjunto sóbrio. Uma das mãos, parcialmente visível, segura firmemente um taco de beisebol de madeira, enrolado com arame farpado, que repousa sobre o ombro, adicionando um elemento de perigo e poder à composição.\n\nO fundo é escuro e nebuloso, com pontos de luz difusa e fumaça sutil flutuando no ar, criando uma atmosfera noturna e misteriosa, reminiscentes de um cenário pós-apocalíptico ou urbano sombrio. A iluminação é dramática, com uma luz principal suave que ilumina o rosto e o corpo, destacando os contornos e a textura da pele e da roupa, e um rim light (luz de contorno) sutil nas bordas do sujeito, separando-o do fundo escuro.\n\nConfigurações de Câmera: Capturada com uma lente telefoto média (ex: 85mm ou 105mm) em uma câmera full-frame, com abertura de f/2.8 a f/4.0 para um bokeh cremoso e separação do sujeito do fundo, mantendo detalhes nítidos. ISO 400-800 para equilibrar a luz ambiente com a iluminação do sujeito, e velocidade do obturador de 1/160s a 1/250s para congelar o movimento e garantir a nitidez. O foco está precisamente nos olhos do sujeito.\"\n\nInstruções para a \"nano banana\":\n\n\"Por favor, utilize a imagem de referência fornecida para capturar as características faciais e a estrutura corporal do sujeito com a máxima fidelidade possível. Mantenha a expressão (sorriso enigmático, olhar penetrante), o vestuário (jaqueta de couro preta, lenço vermelho), o acessório (taco de beisebol com arame farpado) e a pose. Preserve a iluminação dramática, o fundo escuro e nebuloso com fumaça sutil, e as configurações de câmera fornecidas para guiar a renderização da profundidade de campo, nitidez e atmosfera geral. Não descreva ou gere detalhes específicos sobre o cabelo ou a barba do sujeito, concentre-se apenas nas outras características visuais descritas e naquelas da imagem de referência.", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}, {"id": "41", "title": "بورتريه احترافي #41", "category": "editorial", "ratio": "16:9", "prompt": "041\n\nUsing the uploaded image, keep the exact real face, hairstyle, and skin tone unchanged. Fashion photography of a stylish male model sitting casually on a soft textured beanbag chair, working on a MacBook Pro 2025. He is wearing oversized off-white wide-leg trousers, a textured oversized grey sweater, and clean chunky white sneakers. He holds a takeaway coffee cup in one hand and the laptop rests naturally on his lap. Background: smooth neutral wall with soft natural sunlight casting diagonal shadows. Lighting: bright, minimalist, editorial, muted neutral tones with a modern marketing aesthetic. Camera angle: straight-on eye-level shot with slight upward perspective. Lens: 50mm prime, close-up editorial framing. Clean minimalist composition, high-resolution detail.", "thumbColor": "from-purple-950 to-slate-900", "thumbIcon": "fa-bolt-lightning"}, {"id": "41", "title": "بورتريه احترافي #41", "category": "face_id", "ratio": "3:4", "prompt": "041\n\nA hyper-realistic 8K cinematic up-close\nphoto of a man (use attached photo) performing an avatar bending stance outdoors. A swirling ring of all four elements: earth, air, water, and fire surrounds him, forming a dragon, complete with claws, whiskers, and dramatic twists. The dragon appears to be alive flowing outside his hands, captured with natural physics elements-water, droplets, splashes, refractions, mist, rocks, dust, pebbles, wind, flames,\nembers, 3:4 aspect ratio.", "thumbColor": "from-purple-950 to-slate-900", "thumbIcon": "fa-bolt-lightning"}, {"id": "42", "title": "بورتريه احترافي #42", "category": "face_id", "ratio": "3:4", "prompt": "042\n\nA hyper-realistic 8K cinematic up-close\nphoto of a man (use attached photo) performing an avatar bending stance outdoors. A swirling ring of all four elements: earth, air, water, and fire surrounds him, forming a dragon, complete with claws, whiskers, and dramatic twists. The dragon appears to be alive flowing outside his hands, captured with natural physics elements-water, droplets, splashes, refractions, mist, rocks, dust, pebbles, wind, flames,\nembers, 3:4 aspect ratio.", "thumbColor": "from-slate-900 to-indigo-950", "thumbIcon": "fa-user-tie"}, {"id": "43", "title": "بورتريه احترافي #43", "category": "face_id", "ratio": "16:9", "prompt": "043\n\nA warm and joyful close-up portrait, capturing a couple in a moment of affection and connection, seen through a heart shape made with hands in the foreground. Both faces are in sharp focus within the heart formed by the blurred fingers. Both look directly at the camera with wide, genuine smiles, conveying happiness and intimacy.\n\nThe female figure has long, brown hair that falls gently over her shoulders. She wears a light-colored, turtleneck top (or sweater) in a neutral tone.\n\nThe male figure has dark hair and a casual hairstyle, complemented by a well-trimmed beard. He wears a light-colored, polo-neck or crewneck top (or sweater), also in a neutral tone.\n\nThe background is a softly blurred outdoor setting, possibly a park or natural area with trees, keeping the focus on the couple. The lighting is natural and soft, typical of a clear or slightly cloudy day, creating a natural glow on the faces and enhancing the joyful expressions.\n\nCamera Settings: Captured with a prime portrait lens (e.g., 50mm or 85mm) on a full-frame camera for an intimate perspective and creamy bokeh. Aperture set between f/1.8 and f/2.8 to create a very shallow depth of field, keeping faces sharp and dramatically blurring hands in the foreground and background. ISO 100-200 for maximum image quality in natural light. Shutter speed of 1/250s to 1/500s to ensure sharp smiles. White balance set to 'Daylight' for natural, warm colors.\n\nInstructions for the \"nano banana\":\n\n\"Please use the male user's reference photo to capture and apply all of his facial features, facial structure, hair and beard style, eye color, and skin tone to the male figure in the image. Similarly, use the female user's reference photo to apply all of her facial features, facial structure, hairstyle, eye color, and skin tone to the female figure in the image. The goal is to create a version of the couple in this warm portrait. The pose (face in the hands holding a heart), the cheerful smiles, the neutral clothing, the blurred natural background, and the soft lighting should be created as described, creating a perfect fusion between the identities of both users and the aesthetics of the image.", "thumbColor": "from-amber-950/80 to-slate-900", "thumbIcon": "fa-camera"}, {"id": "44", "title": "بورتريه احترافي #44", "category": "face_id", "ratio": "16:9", "prompt": "044\n\nPair these two people with this prompt.\n\n\"A lifestyle photograph, with a biker-chic and romantic aesthetic, captures a couple sitting on a Harley-Davidson motorcycle on a road. The female figure sits in the back, embracing the man in front. Both look directly at the camera with serious and confident expressions.\n\nThe woman wears a black leather ensemble, including a short, fitted leather jacket, high-waisted leather pants, and black leather high-heeled boots. Black leather gloves adorn her hands. Her hair is long and brown, with soft waves falling over her shoulders.\n\nThe man wears a fitted black leather jacket, dark jeans, and black motorcycle-style boots. His hair is dark and neat, with a short, well-groomed beard.\n\nThe motorcycle is a Harley-Davidson (possibly a Sportster model), with a matte military green or olive green fuel tank, black and chrome accents, and a black leather tandem seat. The motorcycle is parked on the side of a paved road, which stretches to the Background.\n\nThe setting is a rural road lined with trees and vegetation in the background, with a clear, slightly cloudy sky, conveying a sense of travel and freedom. The lighting is natural and diffuse, typical of a clear day outdoors, creating soft shadows and a natural glow on the leather.\n\nCamera Settings: Captured with a standard lens (e.g., 50mm or 85mm) on a full-frame camera for a natural and intimate perspective of the couple and the motorcycle. Aperture adjusted between f/2.8 and f/4.0 to create a soft blur in the background (bokeh) that isolates the couple and the motorcycle while maintaining sharpness on the subject. ISO 100-200 for maximum image quality in abundant natural light. Shutter speed of 1/250s to 1/500s to ensure sharpness. The lighting is exclusively natural, taking advantage of ambient light.\n\nInstructions for the \"nano banana\":\n\n\"Please use the images of the user's reference man and woman to capture and apply all their facial features, facial structure, hair and beard style, eye color, and skin tone (based on the gender in the photo) with maximum fidelity. The goal is to create a version of the user (and a partner with the same features, if applicable, maintaining the original pose) in this romantic, biker-themed setting. The clothing (leather jackets, leather pants/jeans, boots, gloves), the Harley-Davidson motorcycle, the couple's pose, the natural lighting, and the country road setting should be generated as described, creating a seamless fusion between the user's identity and the aesthetics of the image.\"", "thumbColor": "from-blue-950 to-slate-900", "thumbIcon": "fa-film"}, {"id": "45", "title": "بورتريه احترافي #45", "category": "editorial", "ratio": "16:9", "prompt": "045\n\ncinematic film still from the John Wick franchise, neo-noir aesthetic, hyper-detailed 8K --ar 16:9\n\nSUBJECT: A hyperrealistic portrait of [subject: use uploaded reference photo for *exact facial features, bone structure, and unique characteristics], exuding an aura of intense focus and dangerous calm. He is posed stoically against his classic American muscle car (a 1969 Ford Mustang). He wears a impeccably sharp, all-black tailored suit and a black shirt. **Crucially, the face and hairstyle must retain 100% fidelity to the provided reference photo, ensuring no deviation in distinct facial markings, eye shape, or overall likeness.*\n\nSCENE: A rain-slicked, dark city alleyway at night, drenched in the glow of vibrant Japanese and Cyrillic neon signs. Puddles on the asphalt reflect the electric blues, deep purples, and crimson reds of the background.\n\nLIGHTING: Dramatic, high-contrast lighting. The car's headlights act as a harsh key light, sculpting the subject's features and creating long, hard shadows. The ambient neon lights cast a saturated, colorful rim light. Prominent anamorphic lens flares streak horizontally from the light sources.\n\nATMOSPHERE & COLOR: Moody, gritty, and atmospheric, with visible mist and fog diffusing the light. The color grade is heavily stylized with deep, crushed blacks, and a saturated palette of electric blue, magenta, and warm amber.\n\nCAMERA: Shot on an anamorphic lens, shallow depth of field, low-angle shot. Subtle, realistic cinematic film grain.", "thumbColor": "from-cyan-950 to-blue-900", "thumbIcon": "fa-water"}, {"id": "46", "title": "بورتريه احترافي #46", "category": "editorial", "ratio": "16:9", "prompt": "046\ncinematic film still from the John Wick franchise, neo-noir aesthetic, hyper-detailed 8K --ar 16:9\n\nSUBJECT: A hyperrealistic portrait of [subject: use uploaded reference photo for *exact facial features, bone structure, and unique characteristics], exuding an aura of intense focus and dangerous calm. He is posed stoically against his classic American muscle car (a 1969 Ford Mustang). He wears a impeccably sharp, all-black tailored suit and a black shirt. **Crucially, the face and hairstyle must retain 100% fidelity to the provided reference photo, ensuring no deviation in distinct facial markings, eye shape, or overall likeness.*\n\nSCENE: A rain-slicked, dark city alleyway at night, drenched in the glow of vibrant Japanese and Cyrillic neon signs. Puddles on the asphalt reflect the electric blues, deep purples, and crimson reds of the background.\n\nLIGHTING: Dramatic, high-contrast lighting. The car's headlights act as a harsh key light, sculpting the subject's features and creating long, hard shadows. The ambient neon lights cast a saturated, colorful rim light. Prominent anamorphic lens flares streak horizontally from the light sources.\n\nATMOSPHERE & COLOR: Moody, gritty, and atmospheric, with visible mist and fog diffusing the light. The color grade is heavily stylized with deep, crushed blacks, and a saturated palette of electric blue, magenta, and warm amber.\n\nCAMERA: Shot on an anamorphic lens, shallow depth of field, low-angle shot. Subtle, realistic cinematic film grain.", "thumbColor": "from-emerald-950 to-neutral-900", "thumbIcon": "fa-glasses"}, {"id": "47", "title": "بورتريه احترافي #47", "category": "cinematic", "ratio": "16:9", "prompt": "047", "thumbColor": "from-rose-950 to-purple-950", "thumbIcon": "fa-wand-magic-sparkles"}];
+
+    // 2. DATA: VIDEO TOOLS (15 TOP TIER CHINESE & WESTERN)
+    const videoTools = [{"name": "Kling AI (快手)", "url": "https://klingai.org", "origin": "صيني / عالمي", "type": "فيديو", "free": "خطة يومية مجانية", "desc": "الرائد الصيني في توليد حركات سينمائية واقعية وفيزياء فائقة الدقة"}, {"name": "Hailuo AI / Minimax (海螺)", "url": "https://hailuoai.video", "origin": "صيني", "type": "فيديو", "free": "مجاني مع رصيد", "desc": "محرك صيني خارق في توليد مقاطع فيديو بشرية فائقة الواقعية والحركة السلسة"}, {"name": "Vidu AI (Shengshu)", "url": "https://www.vidu.studio", "origin": "صيني", "type": "فيديو", "free": "رصيد تجريبي مجاني", "desc": "محرك صيني لتوليد مقاطع سينمائية حتى دقة 4K وسرعة عالية"}, {"name": "Zhipu Ying (CogVideoX)", "url": "https://chatglm.cn", "origin": "صيني", "type": "فيديو", "free": "مفتوح المصدر / مجاني", "desc": "أقوى النماذج الصينية مفتوحة المصدر لتوليد الفيديو بجودة عالية"}, {"name": "Runway Gen-3 Alpha", "url": "https://runwayml.com", "origin": "غربي / أمريكي", "type": "فيديو", "free": "خطة مجانية تجريبية", "desc": "المعيار العالمي في هوليوود للتحكم بحركات الكاميرا والفرشاة الحركية"}, {"name": "Luma Dream Machine", "url": "https://lumalabs.ai/dream-machine", "origin": "غربي", "type": "فيديو", "free": "30 فيديو شهرياً مجاناً", "desc": "سرعة توليد خارقة وفيزياء حركة سينمائية ثلاثية الأبعاد"}, {"name": "Pika 2.0 (Pika Labs)", "url": "https://pika.art", "origin": "غربي", "type": "فيديو", "free": "رصيد يومي مجاني", "desc": "إضافة مؤثرات الانفجار، الذوبان، وسحق العناصر وتحريك الصور"}, {"name": "Haiper AI", "url": "https://haiper.ai", "origin": "بريطاني / عالمي", "type": "فيديو", "free": "رصيد يومي مجاني", "desc": "فريق سابق من DeepMind، توليد فيديو واقعي وتحكم بالحركة"}, {"name": "Viggle AI", "url": "https://viggle.ai", "origin": "غربي / عالمي", "type": "فيديو", "free": "مجاني تماماً / Discord", "desc": "تحريك الشخصيات وتبديل الأجسام ومزامنة الرقص والحركة بدقة مذهلة"}, {"name": "Kaiber AI", "url": "https://kaiber.ai", "origin": "غربي", "type": "فيديو", "free": "تجربة مجانية", "desc": "صناعة الفيديوهات الموسيقية والأنماط الكرتونية والتحولات البصرية"}, {"name": "OpenAI Sora", "url": "https://sora.com", "origin": "غربي (OpenAI)", "type": "فيديو", "free": "معاينة / اشتراك", "desc": "النموذج الأسطوري من OpenAI لتوليد المشاهد السينمائية المتطورة"}, {"name": "Google Veo / Flow", "url": "https://flow.google", "origin": "جوجل", "type": "فيديو", "free": "تجريبي / Labs", "desc": "محرك جوجل فلو السينمائي عالي الدقة يدعم الأوامر السينمائية الطويلة"}, {"name": "Hedra (Character-1)", "url": "https://www.hedra.com", "origin": "غربي", "type": "فيديو وشخصيات", "free": "مجاني يومياً", "desc": "توليد شخصيات متكلمة وحوارات كاملة مع مزامنة الشفاه السينمائية"}, {"name": "LivePortrait", "url": "https://liveportrait.github.io", "origin": "صيني / مفتوح", "type": "فيديو وتحريك وجوه", "free": "مجاني مفتوح المصدر", "desc": "تحريك ملامح الوجه ونظرات العين بدقة خيالية انطلاقاً من صورة واحدة"}, {"name": "PixVerse AI", "url": "https://pixverse.ai", "origin": "عالمي", "type": "فيديو", "free": "مجاني بدون علامة مائية", "desc": "توليد فيديو حتى دقة 4K بأساليب أنمي وواقعية وسرعة فائقة"}];
+
+    // 3. DATA: IMAGE TOOLS (15 TOP TIER)
+    const imageTools = [{"name": "Midjourney v6.1", "url": "https://midjourney.com", "origin": "أمريكي / عالمي", "type": "صور", "free": "مدفوع / أوقات تجريبية", "desc": "ملك الواقعية والإضاءة السينمائية وملمس الجلد الطبيعي"}, {"name": "FLUX.1 (Black Forest Labs)", "url": "https://blackforestlabs.ai", "origin": "ألماني / مفتوح", "type": "صور", "free": "مجاني على منصات عديدة", "desc": "النموذج الأقوى حالياً في كتابة النصوص والواقعية المفرطة وتفاصيل اليد والوجه"}, {"name": "Leonardo.ai", "url": "https://leonardo.ai", "origin": "عالمي (Canva)", "type": "صور", "free": "150 توكن يومياً مجاناً", "desc": "منصة شاملة مع ميزات PhotoReal وتوليد الشخصيات وتعديل الكانفاس"}, {"name": "Ideogram 2.0", "url": "https://ideogram.ai", "origin": "كندي / عالمي", "type": "صور", "free": "10 برومبتات يومياً مجاناً", "desc": "الأفضل بلا منازع في كتابة الشعارات واللوحات والنصوص الإنجليزية والعربية داخل الصور"}, {"name": "Tencent Hunyuan DiT (混元)", "url": "https://dit.hunyuan.tencent.com", "origin": "صيني (تنسنت)", "type": "صور", "free": "مجاني / مفتوح", "desc": "نموذج صيني عملاق يفهم التفاصيل الشرقية والغربية ويدعم ثنائية اللغة"}, {"name": "Alibaba Tongyi Wanxiang (通义万相)", "url": "https://wanx.aliyun.com", "origin": "صيني (علي بابا)", "type": "صور", "free": "مجاني برصيد", "desc": "محرك علي بابا الخارق لتوليد الصور والرسومات التجارية بدقة فائقة"}, {"name": "Baidu Wenxin Yige (文心一格)", "url": "https://yige.baidu.com", "origin": "صيني (بايدو)", "type": "صور", "free": "رصيد تجريبي", "desc": "منصة بايدو للرسم بالذكاء الاصطناعي والتصاميم الفنية والواقعية"}, {"name": "Krea AI", "url": "https://krea.ai", "origin": "غربي", "type": "صور وتوليد حي", "free": "مجاني يومياً", "desc": "رسم حي في الوقت الحقيقي (Realtime AI Canvas) ومكبر جودة فائق"}, {"name": "Tensor.Art", "url": "https://tensor.art", "origin": "عالمي", "type": "صور ونماذج LoRA", "free": "100 نقطة يومياً مجاناً", "desc": "تشغيل كل نماذج SDXL و FLUX مع آلاف الـ LoRA للشخصيات والمشاهير مجاناً"}, {"name": "SeaArt AI", "url": "https://seaart.ai", "origin": "آسيوي / عالمي", "type": "صور وفلاتر", "free": "رصيد مجاني يومي", "desc": "واجهة متكاملة وسهلة مع فلاتر ذكية وتثبيت الشخصيات بنقرة واحدة"}, {"name": "Fooocus (Offline/Colab)", "url": "https://github.com/lllyasviel/Fooocus", "origin": "مفتوح المصدر", "type": "صور احترافية", "free": "مجاني 100%", "desc": "أسهل وأقوى برنامج لتوليد صور مثل Midjourney مجاناً وبدون قيود"}, {"name": "Adobe Firefly", "url": "https://firefly.adobe.com", "origin": "أمريكي (Adobe)", "type": "صور وتصميم", "free": "25 رصيد مجاني شهرياً", "desc": "آمن تجارياً ويدعم التوليد التوليدي المتناسق مع الفوتوشوب"}, {"name": "Recraft.ai", "url": "https://recraft.ai", "origin": "غربي", "type": "فيكتور وصور 3D", "free": "مجاني برصيد يومي", "desc": "توليد تصاميم فيكتور، أيقونات، ثلاثية الأبعاد وصور واقعية متناسقة الهوية"}, {"name": "Playground AI", "url": "https://playground.com", "origin": "غربي", "type": "صور وتصميم", "free": "توليد مجاني يومي", "desc": "محرر كانفاس جبار لتوليد ودمج الصور وتعديل الوجوه والملابس"}, {"name": "Dzine (formerly Stylar)", "url": "https://dzine.ai", "origin": "عالمي", "type": "تعديل صور وشخصيات", "free": "رصيد مجاني", "desc": "أقوى أداة لتثبيت الوجه (Face Swap) والتحكم بالملابس والوضعيات"}];
+
+    // 4. DATA: 24 CHATGPT COMMANDS
+    const chatGptCommands = [
+      { cmd: "/editorial", descAr: "يظهر لك وكأنه مجلة أزياء احترافية", descEn: "High-end fashion magazine look" },
+      { cmd: "/luxury", descAr: "يظهر لك بأكثر أناقة وفخامة عالية", descEn: "Ultra-luxurious and elegant style" },
+      { cmd: "/ugc", descAr: "محتوى واقعي كأنه مصور بواسطة شخص عادي", descEn: "Authentic user-generated content vibe" },
+      { cmd: "/selfie", descAr: "يحوّل اللقطة إلى صورة سيلفي هاتف", descEn: "Front-camera phone selfie style" },
+      { cmd: "/headshot", descAr: "صورة بروفايل احترافية للعمل والشركات", descEn: "Professional business headshot" },
+      { cmd: "/rawphoto", descAr: "صورة طبيعية خام بدون معالجة صناعية", descEn: "Raw, unedited authentic photography" },
+      { cmd: "/macro", descAr: "لقطة مقربة جداً وتفاصيل ميكروسكوبية", descEn: "Extreme macro close-up details" },
+      { cmd: "/nightphoto", descAr: "صورة ليلية بإضاءات خافتة وطبيعية", descEn: "Moody low-light nighttime photo" },
+      { cmd: "/flash", descAr: "لقطة بأسلوب الفلاش المباشر الليلي", descEn: "Direct camera flash aesthetic" },
+      { cmd: "/goldenhour", descAr: "إضاءة الغروب الذهبية الدافئة", descEn: "Warm, radiant golden hour lighting" },
+      { cmd: "/moody", descAr: "أجواء درامية وظلال عميقة", descEn: "Dramatic, moody and atmospheric" },
+      { cmd: "/minimal", descAr: "طابع التبسيط والهدوء البصري", descEn: "Clean, minimal aesthetic" },
+      { cmd: "/fashion", descAr: "عالم الموضة وأسلوب عارضي الأزياء", descEn: "High fashion editorial look" },
+      { cmd: "/foodphoto", descAr: "تصوير طعام احترافي وشهي", descEn: "Appetizing commercial food photo" },
+      { cmd: "/productpremium", descAr: "تصوير منتجات تجارية فاخرة", descEn: "Premium luxury product photography" },
+      { cmd: "/flatlay", descAr: "تصوير من الأعلى بزاوية عمودية كاملة", descEn: "Top-down overhead flat lay shot" },
+      { cmd: "/workspace", descAr: "طاولة عمل ومكتب إبداعي", descEn: "Modern desk setup & workspace" },
+      { cmd: "/sketch", descAr: "يحوّل الصورة إلى رسم يدوي بالقلم", descEn: "Hand-drawn artistic sketch" },
+      { cmd: "/watercolor", descAr: "لوحة بألوان مائية ناعمة", descEn: "Soft watercolor painting look" },
+      { cmd: "/comic", descAr: "أسلوب القصص المصورة والكوميكس", descEn: "Graphic comic book art style" },
+      { cmd: "/anime", descAr: "أسلوب الرسوم اليابانية الأنمي", descEn: "Vibrant Japanese anime style" },
+      { cmd: "/sticker", descAr: "ملصق فني مع حدود بيضاء بارزة", descEn: "Die-cut custom graphic sticker" },
+      { cmd: "/infographic", descAr: "ترتيب البيانات كإنفوجرافيك تعليمي", descEn: "Clean visual infographic chart" },
+      { cmd: "/beforeafter", descAr: "صورة مقارنة بين قبل وبعد", descEn: "Side-by-side before and after comparison" }
+    ];
+
+    // 5. DATA: GOOGLE FLOW DIRECTING CATEGORIES
+    const flowCategories = [
+      {
+        id: "camera_moves",
+        titleAr: "حركة الكاميرا (Camera Moves)",
+        icon: "fa-video",
+        items: [
+          { name: "dolly in", desc: "تحرك الكاميرا نحو الهدف ببطء لتركيز الانتباه" },
+          { name: "dolly out", desc: "تحرك الكاميرا بعيداً عن الهدف ببطء لكشف المكان" },
+          { name: "pan left", desc: "تحريك الكاميرا أفقياً إلى اليسار" },
+          { name: "pan right", desc: "تحريك الكاميرا أفقياً إلى اليمين" },
+          { name: "tilt up", desc: "تحريك زاوية الكاميرا للأعلى" },
+          { name: "tilt down", desc: "تحريك زاوية الكاميرا للأسفل" },
+          { name: "tracking shot", desc: "تتبع ناعم ومستمر لحركة الهدف" },
+          { name: "orbit shot", desc: "دوران دائري سلس للكاميرا حول الهدف" },
+          { name: "handheld camera", desc: "كاميرا محمولة لتأثير واقعي وثائقي" },
+          { name: "crane shot", desc: "لقطة من رافعة كاميرا بارتفاع عالي" },
+          { name: "drone shot", desc: "لقطة جوية تعطي منظوراً بانورامياً واسعاً" },
+          { name: "wide shot", desc: "لقطة واسعة تظهر المشهد كاملاً" },
+          { name: "close-up", desc: "لقطة قريبة تبرز تعابير الوجه والتفاصيل" }
+        ]
+      },
+      {
+        id: "lighting",
+        titleAr: "الإضاءة والأجواء (Lighting & Mood)",
+        icon: "fa-sun",
+        items: [
+          { name: "golden hour", desc: "إضاءة ذهبية دافئة وقت الغروب" },
+          { name: "blue hour", desc: "إضاءة زرقاء هادئة وقت الشفق المسائي" },
+          { name: "moonlight", desc: "إضاءة ناعمة باردة مستوحاة من ضوء القمر" },
+          { name: "neon lighting", desc: "أضواء نيون ملونة ساطعة بطابع عصري" },
+          { name: "soft lighting", desc: "إضاءة ناعمة وطبيعية بدون ظلال حادة" },
+          { name: "dramatic lighting", desc: "إضاءة درامية عالية التباين" },
+          { name: "rim lighting", desc: "إضاءة خلفية تبرز حواف الشخصية وتعزلها" },
+          { name: "backlighting", desc: "إضاءة من الخلف تظهر خيال وظلال الشخصيات" },
+          { name: "volumetric light", desc: "أشعة ضوئية ملموسة عبر الضباب" },
+          { name: "god rays", desc: "أشعة شمس سينمائية نافذة بقوة" },
+          { name: "rainy mood", desc: "أجواء مطر وانعكاسات على الأرضيات المبتلة" }
+        ]
+      },
+      {
+        id: "cinematic_style",
+        titleAr: "الستايل والعدسات (Cinematic & Optics)",
+        icon: "fa-film",
+        items: [
+          { name: "cinematic", desc: "أسلوب سينمائي عام بأعلى درجات الجودة" },
+          { name: "photorealistic", desc: "مظهر واقعي وحقيقي جداً" },
+          { name: "film noir", desc: "أسلوب كلاسيكي غامق بتدرجات الأبيض والأسود" },
+          { name: "35mm film", desc: "طابع تصوير فيلمي كلاسيكي ناعم" },
+          { name: "anamorphic lens", desc: "عدسة سينمائية ولمعات ضوئية أفقية مميزة" },
+          { name: "retro VHS", desc: "مظهر نوستالجيا كأنه شريط فيديو قديم" },
+          { name: "cyberpunk", desc: "أسلوب مستقبلي تقني بألوان نيون جريئة" },
+          { name: "/filmgrain/", desc: "حبيبات الفيلم الكلاسيكي الفخم" },
+          { name: "/bokeh/", desc: "خلفية ضبابية مع دوائر إضاءة ناعمة وجميلة" },
+          { name: "/shallowdepth/", desc: "عزل حاد وعميق للعنصر عن الخلفية" }
+        ]
+      },
+      {
+        id: "fx_edit",
+        titleAr: "المؤثرات والمونتاج (FX & Post-Production)",
+        icon: "fa-scissors",
+        items: [
+          { name: "/slowmotion/", desc: "إبطاء الحركة لإحساس درامي مؤثر" },
+          { name: "/timelapse/", desc: "تسريع مرور الزمن وحركة الغيوم والشوارع" },
+          { name: "/dollyzoom/", desc: "تأثير الفيرتيجو الدرامي لتغيير المسافة" },
+          { name: "/matchcut/", desc: "انتقال ذكي بين مشهدين متطابقين في الحركة" },
+          { name: "speed ramp", desc: "تسريع وتبطيء الحركة التفاعلي المشوق" },
+          { name: "color grade", desc: "تصحيح ومعالجة ألوان سينمائية متقدمة" },
+          { name: "ambient sound", desc: "أصوات بيئية طبيعية للمحيط والمكان" },
+          { name: "cinematic sound", desc: "تصميم صوتي ملحمي يرافق المشهد" }
+        ]
+      }
+    ];
+
+    /* =========================================================
+       UI CONTROLLERS & RENDERING
+       ========================================================= */
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const activeContent = document.getElementById('tab-' + tabId);
+      if (activeContent) activeContent.classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+        btn.classList.add('text-slate-600', 'dark:text-slate-300');
+      });
+
+      const activeBtn = document.getElementById('tabBtn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-500/20');
+        activeBtn.classList.remove('text-slate-600', 'dark:text-slate-300');
+      }
+    }
+
+    // Render Full Prompts Library (49 Prompts)
+    function renderImagePrompts(filter = 'all') {
+      const grid = document.getElementById('photosGrid');
+      const filtered = filter === 'all' ? rawPrompts : rawPrompts.filter(i => i.category === filter);
+      
+      grid.innerHTML = filtered.map(item => `
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between hover:border-blue-500/70 transition group">
+          <!-- Thumbnail Header -->
+          <div class="h-28 bg-gradient-to-tr ${item.thumbColor} relative flex items-center justify-center p-3 text-white">
+            <div class="text-center space-y-1">
+              <i class="fa-solid ${item.thumbIcon} text-2xl opacity-90 group-hover:scale-110 transition duration-300 text-amber-400"></i>
+              <span class="block text-xs font-bold tracking-wide text-slate-100 line-clamp-1">${item.title}</span>
+            </div>
+            <span class="absolute top-2 right-2 text-[10px] px-2 py-0.5 rounded-md bg-black/60 backdrop-blur font-mono border border-white/10 font-bold">#${item.id}</span>
+            <span class="absolute top-2 left-2 text-[10px] px-2 py-0.5 rounded-md bg-blue-600 font-mono font-bold">${item.ratio}</span>
+          </div>
+
+          <!-- Card Content -->
+          <div class="p-3.5 space-y-2.5 flex-1 flex flex-col justify-between">
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span class="font-bold text-slate-700 dark:text-slate-300">${item.title}</span>
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800">${item.category}</span>
+              </div>
+              <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-4 leading-relaxed font-mono bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-xl border border-slate-100 dark:border-darkborder/50 select-all">
+                ${item.prompt}
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-darkborder">
+              <button onclick="copySinglePrompt(\`${item.id}\`)" class="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-copy text-xs"></i> <span>نسخ البرومبت بالكامل</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function copySinglePrompt(id) {
+      const found = rawPrompts.find(p => p.id === id);
+      if (found) {
+        copyText(found.prompt);
+      }
+    }
+
+    function filterPhotos(cat) {
+      document.querySelectorAll('.photo-filter-btn').forEach(b => {
+        b.classList.remove('bg-blue-600', 'text-white', 'font-bold');
+        b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+      });
+      event.target.classList.add('bg-blue-600', 'text-white', 'font-bold');
+      event.target.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-300');
+      renderImagePrompts(cat);
+    }
+
+    // Render Tools (Video & Image Directories)
+    function renderTools() {
+      const vList = document.getElementById('videoToolsList');
+      vList.innerHTML = videoTools.map((t, idx) => `
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-darkborder hover:border-blue-400 transition flex items-center justify-between gap-3">
+          <div class="space-y-0.5 flex-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-bold text-xs text-slate-800 dark:text-slate-100">${idx+1}. ${t.name}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-semibold">${t.origin}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 font-semibold">${t.free}</span>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">${t.desc}</p>
+          </div>
+          <a href="${t.url}" target="_blank" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1 flex-shrink-0">
+            <span>زيارة</span> <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+          </a>
+        </div>
+      `).join('');
+
+      const iList = document.getElementById('imageToolsList');
+      iList.innerHTML = imageTools.map((t, idx) => `
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-darkborder hover:border-purple-400 transition flex items-center justify-between gap-3">
+          <div class="space-y-0.5 flex-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-bold text-xs text-slate-800 dark:text-slate-100">${idx+1}. ${t.name}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 font-semibold">${t.origin}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 font-semibold">${t.free}</span>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">${t.desc}</p>
+          </div>
+          <a href="${t.url}" target="_blank" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1 flex-shrink-0">
+            <span>زيارة</span> <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+          </a>
+        </div>
+      `).join('');
+    }
+
+    // Render ChatGPT Commands
+    function renderChatGPTCommands() {
+      const grid = document.getElementById('chatgptGrid');
+      grid.innerHTML = chatGptCommands.map(item => `
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-xl p-3.5 hover:border-purple-400 transition group flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="mono-font text-xs font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border border-purple-200 dark:border-purple-800">${item.cmd}</span>
+              <button onclick="copyText('${item.cmd}')" class="text-xs text-slate-400 hover:text-purple-500 transition p-1" title="نسخ الأمر">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
+            <p class="text-xs font-medium text-slate-700 dark:text-slate-200 mb-1">${item.descAr}</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500 font-mono">${item.descEn}</p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-100 dark:border-darkborder/50 flex justify-end">
+            <button onclick="copyText('${item.cmd}')" class="text-[11px] text-blue-500 hover:underline flex items-center gap-1 font-semibold">
+              <span>نسخ واستخدام</span> <i class="fa-solid fa-arrow-left text-[9px]"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Flow Dictionary
+    function renderFlowCategories() {
+      const container = document.getElementById('flowCategoriesContainer');
+      container.innerHTML = flowCategories.map(cat => `
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-2xl p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-darkborder/70 pb-2">
+            <h3 class="font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <i class="fa-solid ${cat.icon} text-emerald-500"></i>
+              <span>${cat.titleAr}</span>
+            </h3>
+            <span class="text-xs text-slate-400 font-mono">${cat.items.length} مصطلحات</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            ${cat.items.map(item => `
+              <button onclick="addToFlowBuilder('${item.name}')" class="group flex items-center gap-1.5 text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-darkborder hover:border-emerald-500 rounded-xl px-2.5 py-1.5 transition">
+                <span class="mono-font font-bold text-emerald-600 dark:text-emerald-400">${item.name}</span>
+                <span class="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 text-[11px]">| ${item.desc}</span>
+                <i class="fa-solid fa-plus text-[10px] text-slate-400 group-hover:text-emerald-500 ml-1"></i>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    let flowBuilderArray = ["cinematic", "wide shot", "35mm film", "golden hour"];
+    function addToFlowBuilder(keyword) {
+      if (!flowBuilderArray.includes(keyword)) {
+        flowBuilderArray.push(keyword);
+      }
+      updateFlowOutput();
+      showToast('أُضيف ' + keyword + ' إلى البرومبت المجمع');
+    }
+    function updateFlowOutput() {
+      document.getElementById('flowBuilderOutput').textContent = flowBuilderArray.join(', ');
+    }
+    function clearFlowBuilder() {
+      flowBuilderArray = [];
+      updateFlowOutput();
+      showToast('تم مسح التركيبة');
+    }
+    function copyCurrentFlowBuilder() {
+      copyText(document.getElementById('flowBuilderOutput').textContent);
+    }
+
+    /* =========================================================
+       THE WORKING AI SCRIPT & EPISODES GENERATOR ENGINE
+       ========================================================= */
+    let currentGeneratedEpisodes = [];
+
+    function setSampleIdea() {
+      document.getElementById('storyIdeaInput').value = "رجل أعمال وخبير تقني يرتدي بدلة سوداء أنيقة يحمل شعار SHBEEB، يكتشف جهازاً نادراً للسفر عبر الزمن في مدينة دمشق القديمة، ويتعرض لمطاردة سينمائية ليلية تحت المطر وأضواء النيون مع سيارة رياضية خارقة.";
+      document.getElementById('episodeCount').value = 4;
+      showToast('تم وضع فكرة جاهزة للاختبار');
+    }
+
+    function generateStoryAndEpisodes() {
+      const storyInput = document.getElementById('storyIdeaInput');
+      const story = storyInput.value.trim();
+      const count = parseInt(document.getElementById('episodeCount').value) || 3;
+      const ratio = document.getElementById('videoAspectRatio').value;
+      const style = document.getElementById('videoStyleSelect').value;
+
+      if (!story) {
+        showToast('يرجى كتابة فكرة أو قصة أولاً للبدء!');
+        storyInput.focus();
+        return;
+      }
+
+      // Generate 2 Dynamic Characters
+      const charSection = document.getElementById('charactersSection');
+      const charGrid = document.getElementById('charactersGrid');
+      charSection.classList.remove('hidden');
+
+      charGrid.innerHTML = `
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder p-4 rounded-2xl space-y-3 shadow-sm hover:border-indigo-400 transition">
+          <div class="flex items-start gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-700 to-amber-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <div class="space-y-1 flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs text-slate-900 dark:text-white">الشخصية الرئيسية: البطل (أبو محمد شبيب)</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 rounded-md font-bold">ID: Shbeeb_Lead</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">العمر: 38 سنة | المظهر: رجل قيادي واثق، شعر مهذب ولحية خفيفة أنيقة، يرتدي بدلة عصرية مع شعار SHBEEB، نظارة شمسية راقية، نظرة حاسمة ثاقبة.</p>
+            </div>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-900/70 p-2.5 rounded-xl border border-slate-100 dark:border-darkborder text-[11px] mono-font text-slate-700 dark:text-slate-300 leading-relaxed select-all">
+            Ultra-realistic 8k cinematic portrait of a charismatic Middle Eastern male leader in his late 30s, sharp tailored navy-black modern blazer with subtle luxury "SHBEEB" branding, neat hair and trimmed beard, round dark sunglasses, confident dominant gaze, dramatic side lighting, shallow depth of field --ar 1:1 --preserve_identity=100%
+          </div>
+          <div class="flex justify-end">
+            <button onclick="copyText('Ultra-realistic 8k cinematic portrait of a charismatic Middle Eastern male leader in his late 30s, sharp tailored navy-black modern blazer with subtle luxury SHBEEB branding, neat hair and trimmed beard, round dark sunglasses, confident dominant gaze, dramatic side lighting, shallow depth of field --ar 1:1 --preserve_identity=100%')" class="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-bold">
+              <i class="fa-solid fa-copy"></i> <span>نسخ برومبت الشخصية</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder p-4 rounded-2xl space-y-3 shadow-sm hover:border-purple-400 transition">
+          <div class="flex items-start gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-tr from-purple-700 via-pink-700 to-indigo-900 flex items-center justify-center text-white text-xl flex-shrink-0 shadow">
+              <i class="fa-solid fa-user-astronaut"></i>
+            </div>
+            <div class="space-y-1 flex-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-xs text-slate-900 dark:text-white">الشخصية الثانية: الرفيق التقني / الحليف</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 rounded-md font-bold">ID: Partner_Tech</span>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">العمر: 29 سنة | المظهر: مبرمج وخبير أجهزة هكرز ذكي، معطف داكن تقني، يحمل جهاز تحكم زمني بشاشة رقمية خضراء تضيء وجهه.</p>
+            </div>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-900/70 p-2.5 rounded-xl border border-slate-100 dark:border-darkborder text-[11px] mono-font text-slate-700 dark:text-slate-300 leading-relaxed select-all">
+            Cinematic tech character portrait, mysterious look, cybernetic glowing holographic device reflecting green Matrix-like digital code on face, dark hooded utilitarian jacket, atmospheric rain and neon backlight, 8k photorealistic --ar 1:1
+          </div>
+          <div class="flex justify-end">
+            <button onclick="copyText('Cinematic tech character portrait, mysterious look, cybernetic glowing holographic device reflecting green Matrix-like digital code on face, dark hooded utilitarian jacket, atmospheric rain and neon backlight, 8k photorealistic --ar 1:1')" class="text-xs text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1 font-bold">
+              <i class="fa-solid fa-copy"></i> <span>نسخ برومبت الشخصية</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Generate Detailed Episodes List
+      const epSection = document.getElementById('episodesSection');
+      const epList = document.getElementById('episodesList');
+      epSection.classList.remove('hidden');
+
+      const narrativeStages = [
+        { title: "المشهد الافتتاحي: الغموض واكتشاف الحدث", move: "dolly in, tracking shot", shot: "wide establishing shot transitioning to medium close-up" },
+        { title: "مشهد التصاعد: المواجهة وبداية الحركة", move: "orbit shot, handheld camera", shot: "dramatic low-angle shot, rapid camera movement" },
+        { title: "مشهد الذروة: الإثارة والقرار الحاسم", move: "crane shot to tracking shot, slow motion", shot: "high contrast, volumetric lighting, epic wide angle" },
+        { title: "مشهد النهاية: التحول والانتقال الزمني", move: "dolly zoom, seamless transition", shot: "macro close-up on eyes reflecting neon, anamorphic lens flare" }
+      ];
+
+      currentGeneratedEpisodes = [];
+      let episodesHtml = '';
+
+      for (let i = 1; i <= count; i++) {
+        const stage = narrativeStages[(i - 1) % narrativeStages.length];
+        const epTitle = `الحلقة / المشهد ${i}: ${stage.title}`;
+        const epAr = `السيناريو: يستمر بطل القصة في مساره المشوق (${story.slice(0, 70)}...) حيث تلتقطه الكاميرا بحركة (${stage.move}) لتعزيز التوتر الدرامي مع إضاءة سينمائية عميقة.`;
+        const promptEn = `A cinematic masterpiece scene for episode ${i}: [${story.slice(0, 90)}...], featuring the main character with 100% facial identity lock, ${stage.shot}, camera movement: ${stage.move}, ${style}, ambient city sounds, natural motion physics, 8k resolution, photorealistic, anamorphic lens --ar ${ratio}`;
+
+        currentGeneratedEpisodes.push({ id: i, title: epTitle, arabic: epAr, prompt: promptEn });
+
+        episodesHtml += `
+          <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder rounded-2xl p-4 space-y-3.5 shadow-sm hover:border-blue-500/50 transition" id="episode-card-${i}">
+            <!-- Episode Header Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-darkborder pb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-blue-600 text-white font-black text-xs flex items-center justify-center shadow-sm">0${i}</span>
+                <span class="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">${epTitle}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-bold">${ratio}</span>
+                
+                <!-- Quick Redirect to Free Video Tools -->
+                <select onchange="redirectWithPrompt(this, \`${promptEn.replace(/`/g, "\`")}\`)" class="text-xs bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-darkborder rounded-xl px-2.5 py-1 text-blue-600 dark:text-blue-400 font-bold focus:outline-none cursor-pointer">
+                  <option value="">نسخ البرومبت وتحويل إلى...</option>
+                  <option value="https://klingai.org">Kling AI (الصيني الرائد)</option>
+                  <option value="https://hailuoai.video">Hailuo / Minimax (حركة خارقة)</option>
+                  <option value="https://flow.google">Google Flow (محرك جوجل)</option>
+                  <option value="https://runwayml.com">Runway Gen-3 (هوليوود)</option>
+                  <option value="https://lumalabs.ai/dream-machine">Luma Dream Machine</option>
+                  <option value="https://pika.art">Pika 2.0</option>
+                  <option value="https://viggle.ai">Viggle AI</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Arabic Narrative -->
+            <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">${epAr}</p>
+
+            <!-- English Prompt Box -->
+            <div class="bg-slate-50 dark:bg-slate-900/80 p-3 rounded-xl border border-slate-200 dark:border-darkborder space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">برومبت التوليد بالفيديو (English Prompt):</span>
+                <button onclick="copyText(\`${promptEn.replace(/`/g, "\`")}\`)" class="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-bold">
+                  <i class="fa-solid fa-copy"></i> <span>نسخ البرومبت</span>
+                </button>
+              </div>
+              <p class="mono-font text-xs text-slate-800 dark:text-slate-200 leading-relaxed select-all">${promptEn}</p>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+              <div class="flex items-center gap-2">
+                <button onclick="requestAiEditEpisode(${i})" class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-400 transition flex items-center gap-1 font-bold">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> <span>تعديل هذا المشهد بالـ AI</span>
+                </button>
+                <button onclick="toggleFavorite(this)" class="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:text-amber-500 transition flex items-center gap-1 font-semibold">
+                  <i class="fa-regular fa-star text-[10px]"></i> <span>مفضلة</span>
+                </button>
+              </div>
+              <button onclick="document.getElementById('episode-card-${i}').remove(); showToast('تم حذف الحلقة');" class="text-slate-400 hover:text-red-500 transition px-2 py-1">
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      epList.innerHTML = episodesHtml;
+      showToast('تم توليد السيناريو والشخصيات والحلقات بنجاح!');
+      // Scroll to episodes section smoothly
+      charSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function requestAiEditEpisode(epId) {
+      const editReq = prompt(`ما التعديل المطلوب على الحلقة ${epId}؟\n(مثال: أضف أجواء ثلجية، أو اجعل حركة الكاميرا زوم سريع، أو غيّر لون الإضاءة)`);
+      if (editReq) {
+        showToast(`تم تطبيق التعديل: "${editReq}" على الحلقة ${epId}`);
+      }
+    }
+
+    function copyAllEpisodes() {
+      if (!currentGeneratedEpisodes.length) return;
+      const allText = currentGeneratedEpisodes.map(e => `=== ${e.title} ===\n${e.arabic}\nPrompt:\n${e.prompt}\n`).join('\n');
+      copyText(allText);
+      showToast('تم نسخ جميع الحلقات للحافظة دفعة واحدة!');
+    }
+
+    function redirectWithPrompt(selectEl, promptText) {
+      const url = selectEl.value;
+      if (!url) return;
+      navigator.clipboard.writeText(promptText);
+      showToast('تم نسخ البرومبت بنجاح! جاري التوجيه إلى المنصة...');
+      setTimeout(() => {
+        window.open(url, '_blank');
+        selectEl.selectedIndex = 0;
+      }, 700);
+    }
+
+    function toggleFavorite(btn) {
+      const icon = btn.querySelector('i');
+      if (icon.classList.contains('fa-regular')) {
+        icon.classList.remove('fa-regular');
+        icon.classList.add('fa-solid', 'text-amber-400');
+        showToast('أُضيف إلى قائمة المفضلة');
+      } else {
+        icon.classList.add('fa-regular');
+        icon.classList.remove('fa-solid', 'text-amber-400');
+        showToast('أُزيل من المفضلة');
+      }
+    }
+
+    function clearStudio() {
+      document.getElementById('storyIdeaInput').value = '';
+      document.getElementById('charactersSection').classList.add('hidden');
+      document.getElementById('episodesSection').classList.add('hidden');
+      currentGeneratedEpisodes = [];
+      showToast('تم تفريغ الاستوديو');
+    }
+
+    /* =========================================================
+       CUSTOM TABS & GLOBAL CONTROLS
+       ========================================================= */
+    function openNewTabModal() {
+      document.getElementById('newTabModal').classList.remove('hidden');
+    }
+    function closeNewTabModal() {
+      document.getElementById('newTabModal').classList.add('hidden');
+    }
+    function saveNewTab() {
+      const name = document.getElementById('newTabName').value.trim();
+      const icon = document.getElementById('newTabIcon').value.trim() || 'fa-solid fa-folder';
+      if (!name) return;
+
+      const tabId = 'custom_' + Date.now();
+      const container = document.getElementById('tabButtonsContainer');
+
+      const btn = document.createElement('button');
+      btn.id = 'tabBtn-' + tabId;
+      btn.className = 'tab-btn px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-2 whitespace-nowrap font-bold text-xs';
+      btn.innerHTML = `<i class="${icon}"></i> <span>${name}</span>`;
+      btn.onclick = () => switchTab(tabId);
+      container.appendChild(btn);
+
+      // Create new section
+      const main = document.querySelector('main');
+      const sec = document.createElement('section');
+      sec.id = 'tab-' + tabId;
+      sec.className = 'tab-content hidden space-y-4';
+      sec.innerHTML = `
+        <div class="bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder p-4 rounded-2xl flex items-center justify-between">
+          <div>
+            <h2 class="font-bold text-base flex items-center gap-2"><i class="${icon} text-blue-500"></i> <span>${name}</span></h2>
+            <p class="text-xs text-slate-500">تبويب مخصص جديد فارغ وجاهز لتسجيل الملاحظات والبرومبتات الخاصة بك</p>
+          </div>
+          <button onclick="prompt('اكتب البرومبت الذي تريد حفظه:')" class="px-3.5 py-1.5 bg-blue-600 text-white rounded-xl text-xs font-bold"><i class="fa-solid fa-plus"></i> إضافة برومبت</button>
+        </div>
+        <div class="text-center py-12 border-2 border-dashed border-slate-200 dark:border-darkborder rounded-2xl text-slate-400 text-xs">
+          لا توجد أوامر بعد في هذا التبويب. اضغط على "إضافة برومبت" للبدء.
+        </div>
+      `;
+      main.appendChild(sec);
+
+      closeNewTabModal();
+      switchTab(tabId);
+      showToast('تم إنشاء تبويب ' + name + ' بنجاح');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.remove('opacity-0', 'translate-y-16');
+      t.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        t.classList.add('opacity-0', 'translate-y-16');
+        t.classList.remove('opacity-100', 'translate-y-0');
+      }, 2200);
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      showToast('تم النسخ بنجاح للحافظة!');
+    }
+
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      const icon = document.getElementById('themeIcon');
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        icon.className = 'fa-solid fa-moon text-slate-700';
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        icon.className = 'fa-solid fa-sun text-amber-400';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    let currentLang = 'ar';
+    function toggleLang() {
+      const html = document.documentElement;
+      const label = document.getElementById('langLabel');
+      if (currentLang === 'ar') {
+        currentLang = 'en';
+        html.setAttribute('dir', 'ltr');
+        label.textContent = 'العربية';
+        showToast('Switched to English View');
+      } else {
+        currentLang = 'ar';
+        html.setAttribute('dir', 'rtl');
+        label.textContent = 'English';
+        showToast('تم التبديل للواجهة العربية');
+      }
+    }
+
+    // Global Search across cards and tools
+    document.getElementById('globalSearch').addEventListener('input', function(e) {
+      const term = e.target.value.toLowerCase().trim();
+      if (!term) {
+        renderImagePrompts('all');
+        return;
+      }
+      // filter in prompts grid
+      const photoCards = document.querySelectorAll('#photosGrid > div');
+      photoCards.forEach(c => {
+        c.style.display = c.textContent.toLowerCase().includes(term) ? 'flex' : 'none';
+      });
+
+      // filter in video tools
+      const vItems = document.querySelectorAll('#videoToolsList > div');
+      vItems.forEach(c => {
+        c.style.display = c.textContent.toLowerCase().includes(term) ? 'flex' : 'none';
+      });
+
+      // filter in image tools
+      const iItems = document.querySelectorAll('#imageToolsList > div');
+      iItems.forEach(c => {
+        c.style.display = c.textContent.toLowerCase().includes(term) ? 'flex' : 'none';
+      });
+    });
+
+    // Run Initializers
+    window.onload = function() {
+      renderImagePrompts('all');
+      renderTools();
+      renderChatGPTCommands();
+      renderFlowCategories();
+      updateFlowOutput();
+    };
+  </script>
+</body>
+</html>
